@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CELL_SIZE } from "../constants/constants";
+import { GlobalContext } from "../context/global.context";
 
 // NEED TO MAKE DIV W AND H DYNAMIC BASED ON CELL SIZE
 
@@ -11,18 +12,26 @@ type NodeProps = {
 };
 
 export const Node = ({ row, col, isStart, isTarget }: NodeProps) => {
-  const [isWall, setIsWall] = useState(false);
+  const { allNodes, setAllNodes } = useContext(GlobalContext);
+
+  const currentNode = allNodes[`${row},${col}`];
 
   const handleAddWall = () => {
-    setIsWall(!isWall);
+    const newNodes = { ...allNodes };
+    newNodes[`${row},${col}`].isWall = !newNodes[`${row},${col}`].isWall;
+    setAllNodes(newNodes);
   };
 
   return (
     <div
       id={`node-${row}-${col}`}
-      className={`${isWall && "wall"} ${isStart && "start"} ${
-        isTarget && "target"
-      } w-[25px] h-[25px]`}
+      className={`${currentNode && currentNode.isWall && "wall"} ${
+        isStart && "start"
+      } ${isTarget && "target"} ${
+        currentNode && currentNode.visited && "visited"
+      }
+      ${currentNode && currentNode.isCurrent && "current"}
+      w-[25px] h-[25px]`}
       onClick={handleAddWall}
     ></div>
   );
