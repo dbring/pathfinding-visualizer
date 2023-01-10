@@ -3,9 +3,11 @@ export interface Node {
   col: number;
   distance: number;
   isWall: boolean;
+  visiting: boolean;
   visited: boolean;
   isCurrent: boolean;
   prevNode: Node | null;
+  isInShortestPath: boolean;
 }
 
 export interface AllNodes {

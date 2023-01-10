@@ -17,8 +17,10 @@ const initialNode: Node = {
   distance: 0,
   isWall: false,
   visited: false,
+  visiting: false,
   isCurrent: false,
   prevNode: null,
+  isInShortestPath: false,
 };
 
 export const GlobalContext = createContext<IGlobal>({
@@ -63,8 +65,10 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
       distance: 0,
       isWall: false,
       visited: false,
+      visiting: false,
       isCurrent: false,
       prevNode: null,
+      isInShortestPath: false,
     });
 
     const targetRow = Math.floor(Math.random() * numRows);
@@ -75,8 +79,10 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
       distance: 0,
       isWall: false,
       visited: false,
+      visiting: false,
       isCurrent: false,
       prevNode: null,
+      isInShortestPath: false,
     });
 
     const listOfAllNodes: AllNodes = {};
@@ -88,8 +94,10 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
           distance: 0,
           isWall: false,
           visited: false,
+          visiting: false,
           isCurrent: false,
           prevNode: null,
+          isInShortestPath: false,
         };
       }
     }

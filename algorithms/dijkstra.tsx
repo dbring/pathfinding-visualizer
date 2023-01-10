@@ -1,4 +1,5 @@
 import { AllNodes, Node } from "../types/types";
+import { timer } from "../utils/animation/animate-shortest-path";
 
 const directions = [
   [0, 1],
@@ -17,11 +18,14 @@ const isInbounds = (
   numRows: number,
   numCols: number
 ) => {
-  const rowInbound = row > 0 && row < numRows;
-  const colInbound = col > 0 && col < numCols;
+  const rowInbound = row >= 0 && row < numRows;
+  const colInbound = col >= 0 && col < numCols;
 
   return rowInbound && colInbound;
 };
+
+export const getStringRowAndCol = (row: number, col: number): string =>
+  `${row},${col}`;
 
 export const dijkstra = (
   numRows: number,
@@ -30,42 +34,26 @@ export const dijkstra = (
   targetNode: Node,
   allNodes: AllNodes,
   setAllNodes: (allNodes: AllNodes) => void
-): Node | null => {
+): Node[] | null => {
   const heap = [startNode];
+  startNode.visiting = true;
+  const exploredNodes: Node[] = [];
+
   const { row: targetRow, col: targetCol } = targetNode;
-  const visitedNodesInOrder: Node[] = [];
 
   while (heap.length) {
-    let newNodes = { ...allNodes };
-
     sortHeap(heap);
 
     const currentNode = heap.shift();
 
     if (!currentNode) continue;
-
-    const {
-      row,
-      col,
-      distance: currentDistance,
-      isWall,
-      visited,
-    } = currentNode;
-
-    newNodes[`${row},${col}`].isCurrent = true;
-    setAllNodes(newNodes);
-    newNodes = { ...allNodes };
+    exploredNodes.push(currentNode);
+    const { row, col, distance: currentDistance } = currentNode;
 
     //Process node
-    if (isWall || visited) continue;
-
-    newNodes[`${row},${col}`].visited = true;
-    setAllNodes(newNodes);
-    newNodes = { ...allNodes };
-
     if (row === targetRow && col === targetCol) {
       console.log("found target");
-      return currentNode;
+      return exploredNodes;
     }
 
     // Add neighbors
@@ -73,15 +61,15 @@ export const dijkstra = (
       const newRow = row + changeRow;
       const newCol = col + changeCol;
 
-      if (!isInbounds(row, col, numRows, numCols)) continue;
-
-      const neighbor = newNodes[`${newRow},${newCol}`];
+      const neighbor = allNodes[getStringRowAndCol(newRow, newCol)];
       if (!neighbor) continue;
+
+      if (!isInbounds(newRow, newCol, numRows, numCols)) continue;
+      if (neighbor.isWall || neighbor.visiting) continue;
+
       neighbor.distance = currentDistance + 1;
       neighbor.prevNode = currentNode;
-      newNodes[`${row},${col}`].isCurrent = false;
-      setAllNodes(newNodes);
-
+      neighbor.visiting = true;
       heap.push(neighbor);
     }
   }

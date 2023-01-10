@@ -31,6 +31,7 @@ export const Node = ({ row, col, isStart, isTarget }: NodeProps) => {
         currentNode && currentNode.visited && "visited"
       }
       ${currentNode && currentNode.isCurrent && "current"}
+      ${currentNode && currentNode.isInShortestPath && "shortest-path"}
       w-[25px] h-[25px]`}
       onClick={handleAddWall}
     ></div>
