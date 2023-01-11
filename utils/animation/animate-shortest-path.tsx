@@ -17,7 +17,7 @@ export const animateShortestPath = (
 
       copyAllNodes[getStringRowAndCol(row, col)].isInShortestPath = true;
       setAllNodes(copyAllNodes);
-      await timer(300);
+      await timer(0);
     }
   };
 

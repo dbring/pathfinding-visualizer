@@ -14,9 +14,15 @@ export const animateExploredNodes = async (
 
       if (!copyAllNodes[getStringRowAndCol(row, col)]) return;
 
-      copyAllNodes[getStringRowAndCol(row, col)].visited = true;
+      copyAllNodes[getStringRowAndCol(row, col)].isCurrent = true;
       setAllNodes(copyAllNodes);
-      await timer(1);
+
+      await timer(0);
+
+      const newCopyOfAllNodes = { ...allNodes };
+      newCopyOfAllNodes[getStringRowAndCol(row, col)].isCurrent = false;
+      newCopyOfAllNodes[getStringRowAndCol(row, col)].visited = true;
+      setAllNodes(newCopyOfAllNodes);
     }
   };
 

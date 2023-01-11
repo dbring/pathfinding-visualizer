@@ -1,42 +1,22 @@
 import { adjacentDirections } from "../constants/constants";
 import { AllNodes, Node } from "../types/types";
+import { getStringRowAndCol, isInbounds } from "./dijkstra";
 
-const sortHeap = (heap: Node[]) => {
-  heap.sort((nodeA, nodeB) => nodeA.distance - nodeB.distance);
-};
-
-export const isInbounds = (
-  row: number,
-  col: number,
-  numRows: number,
-  numCols: number
-) => {
-  const rowInbound = row >= 0 && row < numRows;
-  const colInbound = col >= 0 && col < numCols;
-
-  return rowInbound && colInbound;
-};
-
-export const getStringRowAndCol = (row: number, col: number): string =>
-  `${row},${col}`;
-
-export const dijkstra = (
+export const breadthFirstSearch = (
   numRows: number,
   numCols: number,
   startNode: Node,
   targetNode: Node,
   allNodes: AllNodes
-): Node[] => {
-  const heap = [startNode];
+): Node[] | null => {
+  const queue = [startNode];
   startNode.visiting = true;
   const exploredNodes: Node[] = [];
 
   const { row: targetRow, col: targetCol } = targetNode;
 
-  while (heap.length) {
-    sortHeap(heap);
-
-    const currentNode = heap.shift();
+  while (queue.length) {
+    const currentNode = queue.shift();
 
     if (!currentNode) continue;
     exploredNodes.push(currentNode);
@@ -62,7 +42,7 @@ export const dijkstra = (
       neighbor.distance = currentDistance + 1;
       neighbor.prevNode = currentNode;
       neighbor.visiting = true;
-      heap.push(neighbor);
+      queue.push(neighbor);
     }
   }
   console.log("target not found");

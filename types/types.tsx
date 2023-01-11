@@ -2,6 +2,8 @@ export interface Node {
   row: number;
   col: number;
   distance: number;
+  heuristic: number;
+  aStarDistance: number;
   isWall: boolean;
   visiting: boolean;
   visited: boolean;
