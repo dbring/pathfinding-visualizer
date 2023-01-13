@@ -1,9 +1,10 @@
 import { useContext, useState } from "react";
 import { algorithms } from "../constants/constants";
 import { GlobalContext } from "../context/global.context";
-import { randomizedDepthFirstSearchMazeGenerator } from "../maze-generating-algorithms/randomized-dfs";
-import { primsMazeGeneratingAlgorithm } from "../maze-generating-algorithms/randomized-prim";
+import { prim } from "../maze-generating-algorithms/prim-v2";
+import { randomizedPrim } from "../maze-generating-algorithms/randomized-prim";
 import { generateRandomMaze } from "../maze-generating-algorithms/randomly-selected";
+import { randomizedDepthFirstSearchMazeGenerator } from "../maze-generating-algorithms/recursive-backtracker";
 import { aStar } from "../pathfinding-algorithms/a-star";
 import { bellmanFord } from "../pathfinding-algorithms/bellman-ford";
 import { breadthFirstSearch } from "../pathfinding-algorithms/breadth-first-search";
@@ -126,14 +127,14 @@ export default function Navigation() {
 
   const handlePrimsMaze = () => {
     handleClearGrid();
-    const maze = primsMazeGeneratingAlgorithm(
+    const mazeNodes = randomizedPrim(
       numRows,
       numCols,
       startNode,
       targetNode,
       allNodes
     );
-    setAllNodes(maze);
+    animateExploredNodes(mazeNodes, allNodes, setAllNodes);
   };
 
   const handleDepthFirstSearchMaze = () => {

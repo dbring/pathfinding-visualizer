@@ -1,41 +1,17 @@
-import { adjacentDirections } from "../constants/constants";
 import {
   getStringRowAndCol,
   isInbounds,
 } from "../pathfinding-algorithms/dijkstra";
 import { AllNodes, Node } from "../types/types";
 
+const PASSAGE = false;
+const WALL = true;
 const distanceTwoDirections = [
   [2, 0],
   [0, 2],
   [-2, 0],
   [0, -2],
 ];
-
-const getDistanceTwoNeighbors = (
-  numRows: number,
-  numCols: number,
-  currentNode: Node,
-  copyOfAllNodes: AllNodes,
-  wallState: boolean
-): Node[] => {
-  const { row, col } = currentNode;
-  const distanceTwoNeighbors: Node[] = [];
-
-  for (const [changeRow, changeCol] of distanceTwoDirections) {
-    const newRow = row + changeRow;
-    const newCol = col + changeCol;
-
-    if (!isInbounds(newRow, newCol, numRows, numCols)) continue;
-    const neighbor = copyOfAllNodes[getStringRowAndCol(newRow, newCol)];
-
-    if (neighbor.isWall !== wallState) continue;
-
-    distanceTwoNeighbors.push(neighbor);
-  }
-
-  return distanceTwoNeighbors;
-};
 
 const setAllNodesAsWalls = (
   startNode: Node,
@@ -45,90 +21,139 @@ const setAllNodesAsWalls = (
   for (const node of Object.values(copyOfAllNodes)) {
     if (node === startNode || node === targetNode) continue;
 
-    node.isWall = true;
+    node.isWall = WALL;
   }
+};
+
+const getWallsDistanceTwo = (
+  numRows: number,
+  numCols: number,
+  node: Node,
+  copyOfAllNodes: AllNodes
+) => {
+  const { row, col } = node;
+  const distanceTwoWalls: Set<Node> = new Set();
+
+  for (const [changeRow, changeCol] of distanceTwoDirections) {
+    const newRow = row + changeRow;
+    const newCol = col + changeCol;
+
+    if (!isInbounds(newRow, newCol, numRows, numCols)) continue;
+
+    const neighbor = copyOfAllNodes[getStringRowAndCol(newRow, newCol)];
+
+    if (neighbor.isWall === PASSAGE) continue;
+
+    distanceTwoWalls.add(neighbor);
+  }
+
+  return distanceTwoWalls;
+};
+
+const getPassagesDistanceTwo = (
+  numRows: number,
+  numCols: number,
+  node: Node,
+  copyOfAllNodes: AllNodes
+): Node[] => {
+  const { row, col } = node;
+  const distanceTwoPassages: Node[] = [];
+
+  for (const [changeRow, changeCol] of distanceTwoDirections) {
+    const newRow = row + changeRow;
+    const newCol = col + changeCol;
+
+    if (!isInbounds(newRow, newCol, numRows, numCols)) continue;
+
+    const neighbor = copyOfAllNodes[getStringRowAndCol(newRow, newCol)];
+
+    if (neighbor.isWall === WALL) continue;
+
+    distanceTwoPassages.push(neighbor);
+  }
+
+  return distanceTwoPassages;
 };
 
 const connectNodes = (
   currentNode: Node,
-  neighborNode: Node,
-  copyOfAllNodes: AllNodes
+  passageNode: Node,
+  copyOfAllNodes: AllNodes,
+  passageNodes: Node[]
 ) => {
-  const inBetweenRow = (currentNode.row + neighborNode.row) / 2;
-  const inBetweenCol = (currentNode.col + neighborNode.col) / 2;
+  const inBetweenRow = Math.floor((currentNode.row + passageNode.row) / 2);
+  const inBetweenCol = Math.floor((currentNode.col + passageNode.col) / 2);
 
-  currentNode.isWall = false;
-  neighborNode.isWall = false;
-  copyOfAllNodes[getStringRowAndCol(inBetweenRow, inBetweenCol)].isWall = false;
+  currentNode.isWall = PASSAGE;
+  copyOfAllNodes[getStringRowAndCol(inBetweenRow, inBetweenCol)].isWall =
+    PASSAGE;
+
+  passageNodes.push(currentNode);
+  passageNodes.push(
+    copyOfAllNodes[getStringRowAndCol(inBetweenRow, inBetweenCol)]
+  );
 };
 
-export const primsMazeGeneratingAlgorithm = (
+export const randomizedPrim = (
   numRows: number,
   numCols: number,
   startNode: Node,
   targetNode: Node,
   allNodes: AllNodes
 ) => {
-  let randomRow = Math.floor(Math.random() * numRows);
-  let randomCol = Math.floor(Math.random() * numCols);
-  let randomNode = allNodes[getStringRowAndCol(randomRow, randomCol)];
   const copyOfAllNodes = { ...allNodes };
-
-  // Check to ensure the initial random node is not the start or target node
-  while (randomNode === startNode || randomNode === targetNode) {
-    randomRow = Math.floor(Math.random() * numRows);
-    randomCol = Math.floor(Math.random() * numCols);
-    randomNode = copyOfAllNodes[getStringRowAndCol(randomRow, randomCol)];
-  }
-
   setAllNodesAsWalls(startNode, targetNode, copyOfAllNodes);
 
-  randomNode.isWall = false;
+  let randomRow = Math.floor(Math.random() * numRows);
+  let randomCol = Math.floor(Math.random() * numCols);
+  let randomNode = copyOfAllNodes[getStringRowAndCol(randomRow, randomCol)];
+  randomNode.isWall = PASSAGE;
 
-  const wallNodesDistanceTwoFromRandomNode = getDistanceTwoNeighbors(
+  const passageNodes: Node[] = [];
+  passageNodes.push(randomNode);
+
+  const frontier: Set<Node> = getWallsDistanceTwo(
     numRows,
     numCols,
     randomNode,
-    copyOfAllNodes,
-    true
+    copyOfAllNodes
   );
 
-  const frontier = [...wallNodesDistanceTwoFromRandomNode];
+  while (frontier.size) {
+    console.log("while");
+    const randomIndex = Math.floor(Math.random() * frontier.size);
+    const frontierArray = Array.from(frontier);
+    let currentNode = frontierArray[randomIndex];
+    frontier.delete(currentNode);
 
-  while (frontier.length) {
-    const randomIndex = Math.floor(Math.random() * frontier.length);
-    const currentNode = frontier.splice(randomIndex, 1)[0];
-
-    currentNode.isWall = false;
-
-    const passageNodesDistanceTwoFromCurrentNode = getDistanceTwoNeighbors(
+    const passagesDistanceTwoFromCurrentNode = getPassagesDistanceTwo(
       numRows,
       numCols,
       currentNode,
-      copyOfAllNodes,
-      false
+      copyOfAllNodes
     );
 
-    if (passageNodesDistanceTwoFromCurrentNode.length) {
+    if (passagesDistanceTwoFromCurrentNode.length) {
       const randomPassageIndex = Math.floor(
-        Math.random() * passageNodesDistanceTwoFromCurrentNode.length
+        Math.random() * passagesDistanceTwoFromCurrentNode.length
       );
-      const randomPassageNode =
-        passageNodesDistanceTwoFromCurrentNode[randomPassageIndex];
+      const randomPassage =
+        passagesDistanceTwoFromCurrentNode[randomPassageIndex];
 
-      connectNodes(currentNode, randomPassageNode, copyOfAllNodes);
+      connectNodes(currentNode, randomPassage, copyOfAllNodes, passageNodes);
     }
 
-    const wallsDistanceTwoFromCurrentNode = getDistanceTwoNeighbors(
+    const wallsDistanceTwoFromCurrentNode = getWallsDistanceTwo(
       numRows,
       numCols,
       currentNode,
-      copyOfAllNodes,
-      true
+      copyOfAllNodes
     );
 
-    frontier.push(...wallsDistanceTwoFromCurrentNode);
+    for (const wall of wallsDistanceTwoFromCurrentNode) {
+      frontier.add(wall);
+    }
   }
 
-  return copyOfAllNodes;
+  return passageNodes;
 };
