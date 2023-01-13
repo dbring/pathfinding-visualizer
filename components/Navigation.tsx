@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
 import { algorithms } from "../constants/constants";
 import { GlobalContext } from "../context/global.context";
-import { prim } from "../maze-generating-algorithms/prim-v2";
 import { randomizedPrim } from "../maze-generating-algorithms/randomized-prim";
 import { generateRandomMaze } from "../maze-generating-algorithms/randomly-selected";
 import { randomizedDepthFirstSearchMazeGenerator } from "../maze-generating-algorithms/recursive-backtracker";
