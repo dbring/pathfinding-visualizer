@@ -1,4 +1,4 @@
-import { getStringRowAndCol } from "../../algorithms/dijkstra";
+import { getStringRowAndCol } from "../../pathfinding-algorithms/dijkstra";
 import { AllNodes, Node } from "../../types/types";
 import { timer } from "./animate-shortest-path";
 

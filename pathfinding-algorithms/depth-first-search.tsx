@@ -42,6 +42,7 @@ export const depthFirstSearch = (
       stack.push(neighbor);
     }
   }
+
   console.log("target not found");
   return exploredNodes;
 };
