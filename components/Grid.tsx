@@ -17,7 +17,7 @@ export const Grid = () => {
           return (
             <tr key={i} className="bg-slate-600">
               {colArray.map((_, j) => (
-                <td key={j} className="border border-white">
+                <td key={j} className="border border-slate-300">
                   <Node
                     key={`${i}-${j}`}
                     row={i}

@@ -54,8 +54,8 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
   }, []);
 
   useEffect(() => {
-    setNumRows(Math.floor(height / CELL_SIZE));
-    setNumCols(Math.floor(width / CELL_SIZE));
+    setNumRows(Math.floor(height / (CELL_SIZE + 10)));
+    setNumCols(Math.floor(width / (CELL_SIZE + 5)));
   }, [width, height]);
 
   useEffect(() => {

@@ -1,9 +1,10 @@
 import { useContext, useState } from "react";
 import { algorithms } from "../constants/constants";
 import { GlobalContext } from "../context/global.context";
+import { randomizedKruskal } from "../maze-generating-algorithms/randomized-kruskal";
 import { randomizedPrim } from "../maze-generating-algorithms/randomized-prim";
 import { generateRandomMaze } from "../maze-generating-algorithms/randomly-selected";
-import { randomizedDepthFirstSearchMazeGenerator } from "../maze-generating-algorithms/recursive-backtracker";
+import { randomizedDepthFirstSearch } from "../maze-generating-algorithms/recursive-backtracker";
 import { aStar } from "../pathfinding-algorithms/a-star";
 import { bellmanFord } from "../pathfinding-algorithms/bellman-ford";
 import { breadthFirstSearch } from "../pathfinding-algorithms/breadth-first-search";
@@ -133,20 +134,23 @@ export default function Navigation() {
       targetNode,
       allNodes
     );
-    animateExploredNodes(mazeNodes, allNodes, setAllNodes);
   };
 
   const handleDepthFirstSearchMaze = () => {
     handleClearGrid();
-    console.log("inside handler");
-    const maze = randomizedDepthFirstSearchMazeGenerator(
+    const maze = randomizedDepthFirstSearch(
       numRows,
       numCols,
       startNode,
       targetNode,
       allNodes
     );
-    setAllNodes(maze);
+    animateExploredNodes(maze, allNodes, setAllNodes);
+  };
+
+  const handleKruskalsMaze = () => {
+    handleClearGrid();
+    randomizedKruskal(numRows, numCols, startNode, targetNode, allNodes);
   };
 
   return (
@@ -203,7 +207,7 @@ export default function Navigation() {
                 ? "bg-[#1abc9c] text-white"
                 : "bg-[#34495e]"
             }`}
-            onClick={handlePrimsMaze}
+            onClick={handleDepthFirstSearchMaze}
           >
             Mazes & Patterns
           </button>

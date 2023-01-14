@@ -1,26 +1,19 @@
+import { distanceTwoDirections, PASSAGE, WALL } from "../constants/constants";
 import {
   getStringRowAndCol,
   isInbounds,
 } from "../pathfinding-algorithms/dijkstra";
 import { AllNodes, Node } from "../types/types";
 
-const PASSAGE = false;
-const WALL = true;
-const distanceTwoDirections = [
-  [2, 0],
-  [0, 2],
-  [-2, 0],
-  [0, -2],
-];
-
-const setAllNodesAsWalls = (
+export const setAllNodesAsWalls = (
   startNode: Node,
   targetNode: Node,
   copyOfAllNodes: AllNodes
 ) => {
   for (const node of Object.values(copyOfAllNodes)) {
-    if (node === startNode || node === targetNode) continue;
-
+    const { row, col } = node;
+    if (row === startNode.row && col === startNode.col) continue;
+    if (row === targetNode.row && col === targetNode.col) continue;
     node.isWall = WALL;
   }
 };
@@ -103,10 +96,12 @@ export const randomizedPrim = (
 ) => {
   const copyOfAllNodes = { ...allNodes };
   setAllNodesAsWalls(startNode, targetNode, copyOfAllNodes);
+  console.log(copyOfAllNodes);
 
   let randomRow = Math.floor(Math.random() * numRows);
   let randomCol = Math.floor(Math.random() * numCols);
   let randomNode = copyOfAllNodes[getStringRowAndCol(randomRow, randomCol)];
+
   randomNode.isWall = PASSAGE;
 
   const passageNodes: Node[] = [];
@@ -120,7 +115,6 @@ export const randomizedPrim = (
   );
 
   while (frontier.size) {
-    console.log("while");
     const randomIndex = Math.floor(Math.random() * frontier.size);
     const frontierArray = Array.from(frontier);
     let currentNode = frontierArray[randomIndex];

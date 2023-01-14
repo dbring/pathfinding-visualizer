@@ -1,86 +1,93 @@
-import { adjacentDirections } from "../constants/constants";
+import {
+  adjacentDirections,
+  distanceTwoDirections,
+  PASSAGE,
+  WALL,
+} from "../constants/constants";
 import {
   getStringRowAndCol,
   isInbounds,
 } from "../pathfinding-algorithms/dijkstra";
 import { AllNodes, Node } from "../types/types";
+import { setAllNodesAsWalls } from "./randomized-prim";
 
-const getUnvisitedNeighbors = (
+const getWallNeighbors = (
   numRows: number,
   numCols: number,
   node: Node,
-  copyOfAllNodes: AllNodes,
-  visited: Set<string>
+  copyOfAllNodes: AllNodes
 ): Node[] => {
   const { row, col } = node;
-  const neighbors: Node[] = [];
-  for (const [changeRow, changeCol] of adjacentDirections) {
+  const neighboringWalls: Node[] = [];
+
+  for (const [changeRow, changeCol] of distanceTwoDirections) {
     const newRow = row + changeRow;
     const newCol = col + changeCol;
 
     if (!isInbounds(newRow, newCol, numRows, numCols)) continue;
-    if (visited.has(getStringRowAndCol(newRow, newCol))) continue;
-    if (copyOfAllNodes[getStringRowAndCol(newRow, newCol)].isWall) continue;
 
-    neighbors.push(copyOfAllNodes[getStringRowAndCol(newRow, newCol)]);
+    const neighboringWall = copyOfAllNodes[getStringRowAndCol(newRow, newCol)];
+    if (neighboringWall.isWall === PASSAGE) continue;
+
+    neighboringWalls.push(neighboringWall);
   }
-  return neighbors;
+  return neighboringWalls;
 };
 
-export const randomizedDepthFirstSearchMazeGenerator = (
+export const randomizedDepthFirstSearch = (
   numRows: number,
   numCols: number,
   startNode: Node,
   targetNode: Node,
   allNodes: AllNodes
 ) => {
+  let copyOfAllNodes = { ...allNodes };
+
+  setAllNodesAsWalls(startNode, targetNode, copyOfAllNodes);
+
   let randomRow = Math.floor(Math.random() * numRows);
   let randomCol = Math.floor(Math.random() * numCols);
-  let randomNode = allNodes[getStringRowAndCol(randomRow, randomCol)];
-  const copyOfAllNodes = { ...allNodes };
+  let randomNode = copyOfAllNodes[getStringRowAndCol(randomRow, randomCol)];
 
-  console.log("inside fn dfs");
-
-  // Check to ensure the initial random node is not the start or target node
-  while (randomNode === startNode || randomNode === targetNode) {
-    randomRow = Math.floor(Math.random() * numRows);
-    randomCol = Math.floor(Math.random() * numCols);
-    randomNode = copyOfAllNodes[getStringRowAndCol(randomRow, randomCol)];
-  }
-  console.log(randomNode);
   const stack = [randomNode];
-  const visited: Set<string> = new Set();
-  visited.add(getStringRowAndCol(randomRow, randomCol));
+  const exploredNodes: Node[] = [];
 
   while (stack.length) {
-    console.log("inside while");
     const currentNode = stack[stack.length - 1];
-    visited.add(getStringRowAndCol(currentNode.row, currentNode.col));
 
-    if (currentNode.isWall) {
-      stack.pop();
-      continue;
-    }
+    if (currentNode === undefined) continue;
 
-    const unvisitedNeighbors = getUnvisitedNeighbors(
+    currentNode.isWall = PASSAGE;
+    exploredNodes.push(currentNode);
+
+    const wallNeighbors = getWallNeighbors(
       numRows,
       numCols,
       currentNode,
-      copyOfAllNodes,
-      visited
+      copyOfAllNodes
     );
 
-    if (unvisitedNeighbors.length) {
-      const randomIndex = Math.floor(Math.random() * unvisitedNeighbors.length);
-      const unvisitedNeighbor = unvisitedNeighbors[randomIndex];
-      unvisitedNeighbor.isWall = true;
-      unvisitedNeighbors.splice(randomIndex, 1);
+    if (wallNeighbors.length) {
+      const randomIndex = Math.floor(Math.random() * wallNeighbors.length);
+      const neighboringWall = wallNeighbors[randomIndex];
 
-      stack.push(...unvisitedNeighbors);
+      const inBetweenRow = Math.floor(
+        (currentNode.row + neighboringWall.row) / 2
+      );
+      const inBetweenCol = Math.floor(
+        (currentNode.col + neighboringWall.col) / 2
+      );
+
+      copyOfAllNodes[getStringRowAndCol(inBetweenRow, inBetweenCol)].isWall =
+        PASSAGE;
+      exploredNodes.push(
+        copyOfAllNodes[getStringRowAndCol(inBetweenRow, inBetweenCol)]
+      );
+      stack.push(neighboringWall);
     } else {
       stack.pop();
     }
   }
   console.log("outside while");
-  return copyOfAllNodes;
+  return exploredNodes;
 };
