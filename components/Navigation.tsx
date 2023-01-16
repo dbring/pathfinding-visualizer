@@ -2,9 +2,13 @@ import { useContext, useState } from "react";
 import { algorithms } from "../constants/constants";
 import { GlobalContext } from "../context/global.context";
 import { randomizedKruskal } from "../maze-generating-algorithms/randomized-kruskal";
-import { randomizedPrim } from "../maze-generating-algorithms/randomized-prim";
+import {
+  randomizedPrim,
+  setAllNodesAsWalls,
+} from "../maze-generating-algorithms/randomized-prim";
 import { generateRandomMaze } from "../maze-generating-algorithms/randomly-selected";
 import { randomizedDepthFirstSearch } from "../maze-generating-algorithms/recursive-backtracker";
+import { recursiveDivision } from "../maze-generating-algorithms/recursive-division";
 import { aStar } from "../pathfinding-algorithms/a-star";
 import { bellmanFord } from "../pathfinding-algorithms/bellman-ford";
 import { breadthFirstSearch } from "../pathfinding-algorithms/breadth-first-search";
@@ -127,13 +131,14 @@ export default function Navigation() {
 
   const handlePrimsMaze = () => {
     handleClearGrid();
-    const mazeNodes = randomizedPrim(
+    const maze = randomizedPrim(
       numRows,
       numCols,
       startNode,
       targetNode,
       allNodes
     );
+    animateExploredNodes(maze, allNodes, setAllNodes);
   };
 
   const handleDepthFirstSearchMaze = () => {
@@ -150,7 +155,29 @@ export default function Navigation() {
 
   const handleKruskalsMaze = () => {
     handleClearGrid();
-    randomizedKruskal(numRows, numCols, startNode, targetNode, allNodes);
+    const maze = randomizedKruskal(
+      numRows,
+      numCols,
+      startNode,
+      targetNode,
+      allNodes
+    );
+    animateExploredNodes(maze, allNodes, setAllNodes);
+  };
+
+  const handleRecursiveDivision = () => {
+    handleClearGrid();
+    const copyOfAllNodes = { ...allNodes };
+    const orientation = "HORIZONTAL";
+    recursiveDivision(
+      1,
+      numRows - 2,
+      1,
+      numCols - 2,
+      copyOfAllNodes,
+      targetNode,
+      orientation
+    );
   };
 
   return (
@@ -207,7 +234,7 @@ export default function Navigation() {
                 ? "bg-[#1abc9c] text-white"
                 : "bg-[#34495e]"
             }`}
-            onClick={handleDepthFirstSearchMaze}
+            onClick={handleKruskalsMaze}
           >
             Mazes & Patterns
           </button>

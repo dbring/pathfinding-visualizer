@@ -2,15 +2,13 @@
 Note: we can make this algorithm more efficient by implementing a ranking system
 */
 
-import { distanceTwoDirections } from "../constants/constants";
+import { distanceTwoDirections, PASSAGE } from "../constants/constants";
 import {
   getStringRowAndCol,
   isInbounds,
 } from "../pathfinding-algorithms/dijkstra";
 import { AllNodes, Node } from "../types/types";
 import { setAllNodesAsWalls } from "./randomized-prim";
-
-const PASSAGE = false;
 
 type NodeTuple = [Node, Node];
 
@@ -110,7 +108,7 @@ export const randomizedKruskal = (
   const copyOfAllNodes = { ...allNodes };
   setAllNodesAsWalls(startNode, targetNode, copyOfAllNodes);
   setForestOfPassages(numRows, numCols, copyOfAllNodes);
-  console.log(copyOfAllNodes);
+  const exploredNodes: Node[] = [];
 
   // Get edges
   let passagesDividedByAWall = getPassagesDividedByAWall(
@@ -138,6 +136,7 @@ export const randomizedKruskal = (
       copyOfAllNodes[getStringRowAndCol(inBetweenRow, inBetweenCol)];
 
     inBetweenWall.isWall = PASSAGE;
+    exploredNodes.push(passage2, inBetweenWall, passage1);
 
     dsu.union(passage1, passage2);
     dsu.union(inBetweenWall, passage2);
@@ -147,6 +146,6 @@ export const randomizedKruskal = (
     false;
   copyOfAllNodes[getStringRowAndCol(targetNode.row, targetNode.col)].isWall =
     false;
-};
 
-// Still not happy with Kruskal results, maybe watch some YT vids
+  return exploredNodes;
+};
