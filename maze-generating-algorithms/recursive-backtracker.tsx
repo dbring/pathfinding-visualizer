@@ -34,7 +34,7 @@ const getWallNeighbors = (
   return neighboringWalls;
 };
 
-export const randomizedDepthFirstSearch = (
+export const recursiveBacktracker = (
   numRows: number,
   numCols: number,
   startNode: Node,

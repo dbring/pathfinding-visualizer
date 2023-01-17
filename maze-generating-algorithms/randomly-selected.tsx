@@ -8,15 +8,19 @@ export const generateRandomMaze = (
   startNode: Node,
   targetNode: Node,
   allNodes: AllNodes
-): AllNodes => {
-  const copyOfAllNodes = { ...allNodes };
+): Node[] => {
+  const mazeWalls: Node[] = [];
+
   for (let row = 0; row < numRows; row++) {
     for (let col = 0; col < numCols; col++) {
-      const node = copyOfAllNodes[getStringRowAndCol(row, col)];
-      if (node === startNode || node === targetNode) continue;
-      node.isWall = Math.random() < 0.25 ? WALL : PASSAGE;
+      const node = allNodes[getStringRowAndCol(row, col)];
+
+      if (row === startNode.row && col === startNode.col) continue;
+      if (row === targetNode.row && col === targetNode.col) continue;
+
+      if (Math.random() < 0.25) mazeWalls.push(node);
     }
   }
 
-  return copyOfAllNodes;
+  return mazeWalls;
 };

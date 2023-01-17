@@ -1,5 +1,8 @@
+import Button from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import { useContext, useState } from "react";
-import { algorithms } from "../constants/constants";
+import { algorithms, mazes } from "../constants/constants";
 import { GlobalContext } from "../context/global.context";
 import { randomizedKruskal } from "../maze-generating-algorithms/randomized-kruskal";
 import {
@@ -7,7 +10,7 @@ import {
   setAllNodesAsWalls,
 } from "../maze-generating-algorithms/randomized-prim";
 import { generateRandomMaze } from "../maze-generating-algorithms/randomly-selected";
-import { randomizedDepthFirstSearch } from "../maze-generating-algorithms/recursive-backtracker";
+import { recursiveBacktracker } from "../maze-generating-algorithms/recursive-backtracker";
 import { recursiveDivision } from "../maze-generating-algorithms/recursive-division";
 import { aStar } from "../pathfinding-algorithms/a-star";
 import { bellmanFord } from "../pathfinding-algorithms/bellman-ford";
@@ -19,18 +22,38 @@ import {
 } from "../pathfinding-algorithms/dijkstra";
 import { Node } from "../types/types";
 import { animateExploredNodes } from "../utils/animation/animate-exploration";
+import { animateMazePaths } from "../utils/animation/animate-maze-paths";
+import { animateMazeWalls } from "../utils/animation/animate-maze-walls";
 import { animateShortestPath } from "../utils/animation/animate-shortest-path";
 import { constructShortestPath } from "../utils/animation/construct-shortest-path";
 
 export default function Navigation() {
   const { numRows, numCols, startNode, targetNode, allNodes, setAllNodes } =
     useContext(GlobalContext);
+  const [anchorElAlgorithms, setAnchorElAlgorithms] =
+    useState<null | HTMLElement>(null);
+  const [anchorElMazes, setAnchorElMazes] = useState<null | HTMLElement>(null);
 
-  const [isAlgorithmsDropdownOpen, setIsAlgorithmsDropdownOpen] =
-    useState(false);
+  const handleClickAlgorithms = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    setAnchorElAlgorithms(event.currentTarget);
+  };
+  const handleCloseAlgorithms = () => {
+    setAnchorElAlgorithms(null);
+  };
 
-  const handleVisualize = async (id: string) => {
-    let exploredNodes;
+  const handleClickMazes = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorElMazes(event.currentTarget);
+  };
+
+  const handleCloseMazes = () => {
+    setAnchorElMazes(null);
+  };
+
+  const handleVisualizeAlgorithms = async (id: string) => {
+    handleCloseAlgorithms();
+    let exploredNodes: Node[] = [];
 
     if (algorithms[id] === "dijkstra") {
       exploredNodes = dijkstra(
@@ -99,6 +122,81 @@ export default function Navigation() {
     animateShortestPath(shortestPath, allNodes, setAllNodes);
   };
 
+  const handleVisualizeMazes = async (id: string) => {
+    handleCloseMazes();
+    handleClearGrid();
+    const copyOfAllNodes = { ...allNodes };
+
+    let maze: Node[] = [];
+
+    if (mazes[id] === "prim") {
+      // animates path
+      maze = randomizedPrim(
+        numRows,
+        numCols,
+        startNode,
+        targetNode,
+        copyOfAllNodes
+      );
+      setAllNodesAsWalls(startNode, targetNode, copyOfAllNodes);
+    }
+
+    if (mazes[id] === "randomlySelected") {
+      // animates walls
+      maze = generateRandomMaze(
+        numRows,
+        numCols,
+        startNode,
+        targetNode,
+        copyOfAllNodes
+      );
+      await animateMazeWalls(maze, allNodes, setAllNodes);
+      return;
+    }
+
+    if (mazes[id] === "recursiveBacktracker") {
+      // animates path
+      maze = recursiveBacktracker(
+        numRows,
+        numCols,
+        startNode,
+        targetNode,
+        copyOfAllNodes
+      );
+      setAllNodesAsWalls(startNode, targetNode, copyOfAllNodes);
+    }
+
+    if (mazes[id] === "kruskal") {
+      // animates path
+      maze = randomizedKruskal(
+        numRows,
+        numCols,
+        startNode,
+        targetNode,
+        copyOfAllNodes
+      );
+      setAllNodesAsWalls(startNode, targetNode, copyOfAllNodes);
+    }
+
+    if (mazes[id] === "recursiveDivision") {
+      // animates walls
+      const orientation = "HORIZONTAL";
+      maze = recursiveDivision(
+        1,
+        numRows - 2,
+        1,
+        numCols - 2,
+        copyOfAllNodes,
+        targetNode,
+        orientation
+      );
+      await animateMazeWalls(maze, allNodes, setAllNodes);
+      return;
+    }
+
+    await animateMazePaths(maze, allNodes, setAllNodes);
+  };
+
   const handleClearGrid = () => {
     const copyOfAllNodes = { ...allNodes };
     for (const node of Object.values(copyOfAllNodes)) {
@@ -116,177 +214,85 @@ export default function Navigation() {
     setAllNodes(copyOfAllNodes);
   };
 
-  const handleRandomMaze = () => {
-    handleClearGrid();
-    const copyOfAllNodes = generateRandomMaze(
-      numRows,
-      numCols,
-      startNode,
-      targetNode,
-      allNodes
-    );
-
-    setAllNodes(copyOfAllNodes);
-  };
-
-  const handlePrimsMaze = () => {
-    handleClearGrid();
-    const maze = randomizedPrim(
-      numRows,
-      numCols,
-      startNode,
-      targetNode,
-      allNodes
-    );
-    animateExploredNodes(maze, allNodes, setAllNodes);
-  };
-
-  const handleDepthFirstSearchMaze = () => {
-    handleClearGrid();
-    const maze = randomizedDepthFirstSearch(
-      numRows,
-      numCols,
-      startNode,
-      targetNode,
-      allNodes
-    );
-    animateExploredNodes(maze, allNodes, setAllNodes);
-  };
-
-  const handleKruskalsMaze = () => {
-    handleClearGrid();
-    const maze = randomizedKruskal(
-      numRows,
-      numCols,
-      startNode,
-      targetNode,
-      allNodes
-    );
-    animateExploredNodes(maze, allNodes, setAllNodes);
-  };
-
-  const handleRecursiveDivision = () => {
-    handleClearGrid();
-    const copyOfAllNodes = { ...allNodes };
-    const orientation = "HORIZONTAL";
-    recursiveDivision(
-      1,
-      numRows - 2,
-      1,
-      numCols - 2,
-      copyOfAllNodes,
-      targetNode,
-      orientation
-    );
-  };
-
   return (
     <nav className="bg-slate-600 text-lg min-h-53 mb-30">
       <div className="px-21 py-21 text-gray-300">Pathfinding Visualizer</div>
-      <ul className="float-left list-none pl-0 flex flex-row m-0">
-        <li className="block relative float-left">
-          <button
-            className={`p-5 ml-3 ${
-              isAlgorithmsDropdownOpen
-                ? "bg-[#1abc9c] text-white"
-                : "bg-[#34495e]"
-            }`}
-            onClick={() =>
-              setIsAlgorithmsDropdownOpen(!isAlgorithmsDropdownOpen)
-            }
-          >
-            Algorithms
-          </button>
-          {isAlgorithmsDropdownOpen && (
-            <ul className="ml-3 absolute z-50 bg-[#f3f4f5] min-w-[225px] rounded-lg">
-              <li className="bg-[#34495e] text-white">
-                <button onClick={() => handleVisualize("dijkstra")}>
-                  Dijkstra's Algorithm
-                </button>
-              </li>
-              <li className="bg-[#34495e]  text-white">
-                <button onClick={() => handleVisualize("bellmanFord")}>
-                  Bellman-Ford Algorithm
-                </button>
-              </li>
-              <li className="bg-[#34495e]  text-white">
-                <button onClick={() => handleVisualize("aStar")}>
-                  A* Algorithm
-                </button>
-              </li>
-              <li className="bg-[#34495e]  text-white">
-                <button onClick={() => handleVisualize("depthFirstSearch")}>
-                  Depth-First Search
-                </button>
-              </li>
-              <li className="bg-[#34495e]  text-white">
-                <button onClick={() => handleVisualize("breadthFirstSearch")}>
-                  Breadth-First Search
-                </button>
-              </li>
-            </ul>
-          )}
-        </li>
-        <li className="block relative float-left">
-          <button
-            className={`p-5 ml-3 ${
-              isAlgorithmsDropdownOpen
-                ? "bg-[#1abc9c] text-white"
-                : "bg-[#34495e]"
-            }`}
-            onClick={handleKruskalsMaze}
-          >
-            Mazes & Patterns
-          </button>
-        </li>
-        <li className="">
-          <button
-            className={`p-5 ml-3 ${
-              isAlgorithmsDropdownOpen
-                ? "bg-[#1abc9c] text-white"
-                : "bg-[#34495e]"
-            }`}
-          >
-            Add Weight
-          </button>
-        </li>
-        <li className="">
-          <button
-            className={`p-5 ml-3 ${
-              isAlgorithmsDropdownOpen
-                ? "bg-[#1abc9c] text-white"
-                : "bg-[#34495e]"
-            }`}
-          >
-            Visualize!
-          </button>
-        </li>
-        <li className="">
-          <button
-            className={`p-5 ml-3 ${
-              isAlgorithmsDropdownOpen
-                ? "bg-[#1abc9c] text-white"
-                : "bg-[#34495e]"
-            }`}
-            onClick={handleClearGrid}
-          >
-            Clear Grid
-          </button>
-        </li>
-        <li className="">
-          {" "}
-          <button
-            className={`p-5 ml-3 ${
-              isAlgorithmsDropdownOpen
-                ? "bg-[#1abc9c] text-white"
-                : "bg-[#34495e]"
-            }`}
-            onClick={handleClearGrid}
-          >
-            Speed
-          </button>
-        </li>
-      </ul>
+
+      <Button
+        id="algorithms"
+        aria-controls={Boolean(anchorElAlgorithms) ? "algorithms" : undefined}
+        aria-haspopup="true"
+        aria-expanded={Boolean(anchorElAlgorithms) ? "true" : undefined}
+        onClick={handleClickAlgorithms}
+        className="!bg-black !text-[#b3b3b3]"
+      >
+        Algorithms
+      </Button>
+      <Menu
+        id="algorithms"
+        anchorEl={anchorElAlgorithms}
+        open={Boolean(anchorElAlgorithms)}
+        onClose={handleCloseAlgorithms}
+        MenuListProps={{
+          "aria-labelledby": "algorithms",
+        }}
+        className="menu"
+      >
+        <MenuItem onClick={() => handleVisualizeAlgorithms("dijkstra")}>
+          Dijkstra's Algorithm
+        </MenuItem>
+        <MenuItem onClick={() => handleVisualizeAlgorithms("aStar")}>
+          A* Algorithm
+        </MenuItem>
+        <MenuItem onClick={() => handleVisualizeAlgorithms("bellmanFord")}>
+          Bellman-Ford Algorithm
+        </MenuItem>
+        <MenuItem onClick={() => handleVisualizeAlgorithms("depthFirstSearch")}>
+          Depth-First Search
+        </MenuItem>
+        <MenuItem
+          onClick={() => handleVisualizeAlgorithms("breadthFirstSerach")}
+        >
+          Breadth-First Search
+        </MenuItem>
+      </Menu>
+      <Button
+        id="mazes"
+        aria-controls={Boolean(anchorElMazes) ? "mazes" : undefined}
+        aria-haspopup="true"
+        aria-expanded={Boolean(anchorElMazes) ? "true" : undefined}
+        onClick={handleClickMazes}
+      >
+        Mazes
+      </Button>
+      <Menu
+        id="mazes"
+        anchorEl={anchorElMazes}
+        open={Boolean(anchorElMazes)}
+        onClose={handleCloseMazes}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+      >
+        <MenuItem onClick={() => handleVisualizeMazes("prim")}>
+          Randomized Prim's Algorithm
+        </MenuItem>
+        <MenuItem onClick={() => handleVisualizeMazes("kruskal")}>
+          Randomized Kruskal's Algorithm
+        </MenuItem>
+        <MenuItem onClick={() => handleVisualizeMazes("recursiveDivision")}>
+          Recursive Division
+        </MenuItem>
+        <MenuItem onClick={() => handleVisualizeMazes("recursiveBacktracker")}>
+          Recursive Backtracker
+        </MenuItem>
+        <MenuItem onClick={() => handleVisualizeMazes("randomlySelected")}>
+          Randomly Selected
+        </MenuItem>
+      </Menu>
+      <Button id="basic-button" aria-haspopup="false" onClick={handleClearGrid}>
+        Clear Grid
+      </Button>
     </nav>
   );
 }

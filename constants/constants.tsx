@@ -32,6 +32,10 @@ interface algorithms {
   [index: string]: string;
 }
 
+interface mazes {
+  [index: string]: string;
+}
+
 export const algorithms: algorithms = {
   dijkstra: "dijkstra",
   aStar: "aStar",
@@ -39,3 +43,11 @@ export const algorithms: algorithms = {
   depthFirstSearch: "depthFirstSearch",
   bellmanFord: "bellmanFord",
 };
+
+export const mazes: mazes = {
+  prim: "prim",
+  kruskal: "kruskal",
+  recursiveBacktracker: "recursiveBacktracker",
+  recursiveDivision: "recursiveDivision",
+  randomlySelected: "randomlySelected"
+}

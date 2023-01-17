@@ -8,7 +8,7 @@ export const breadthFirstSearch = (
   startNode: Node,
   targetNode: Node,
   allNodes: AllNodes
-): Node[] | null => {
+): Node[] => {
   const queue = [startNode];
   startNode.visiting = true;
   const exploredNodes: Node[] = [];
