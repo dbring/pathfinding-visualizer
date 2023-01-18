@@ -9,6 +9,10 @@ interface IGlobal {
   targetNode: Node;
   allNodes: AllNodes;
   setAllNodes: (newNodes: AllNodes) => void;
+  selectedAlgorithm: string;
+  setSelectedAlgorithm: (algorithm: string) => void;
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
 }
 
 const initialNode: Node = {
@@ -32,6 +36,10 @@ export const GlobalContext = createContext<IGlobal>({
   targetNode: initialNode,
   allNodes: {},
   setAllNodes: () => {},
+  selectedAlgorithm: "",
+  setSelectedAlgorithm: () => {},
+  loading: false,
+  setLoading: () => {},
 });
 
 interface GlobalProviderProps {
@@ -46,6 +54,8 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
   const [allNodes, setAllNodes] = useState({});
+  const [selectedAlgorithm, setSelectedAlgorithm] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const { innerWidth, innerHeight } = window;
@@ -114,7 +124,18 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
 
   return (
     <GlobalContext.Provider
-      value={{ numRows, numCols, startNode, targetNode, allNodes, setAllNodes }}
+      value={{
+        numRows,
+        numCols,
+        startNode,
+        targetNode,
+        allNodes,
+        setAllNodes,
+        selectedAlgorithm,
+        setSelectedAlgorithm,
+        loading,
+        setLoading,
+      }}
     >
       {children}
     </GlobalContext.Provider>

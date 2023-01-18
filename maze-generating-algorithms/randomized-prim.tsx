@@ -96,7 +96,6 @@ export const randomizedPrim = (
 ) => {
   const copyOfAllNodes = { ...allNodes };
   setAllNodesAsWalls(startNode, targetNode, copyOfAllNodes);
-  console.log(copyOfAllNodes);
 
   let randomRow = Math.floor(Math.random() * numRows);
   let randomCol = Math.floor(Math.random() * numCols);

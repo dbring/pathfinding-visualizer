@@ -190,8 +190,8 @@
     animation-play-state: running;
   }
 
-  .menu .MuiPaper-root {
-    @apply !absolute !left-0  !bg-black !text-white;
+  /* .menu .MuiPaper-root {
+    @apply !absolute !bg-black !text-white;
   }
 
   .menu .MuiList-root {
@@ -200,5 +200,5 @@
 
   .menu .MuiMenuItem-root {
     @apply !block  !py-3.5 !text-sm !font-light !text-[#b3b3b3] !transition !duration-200 first:!font-normal hover:!bg-[#11100F];
-  }
+  } */
 }

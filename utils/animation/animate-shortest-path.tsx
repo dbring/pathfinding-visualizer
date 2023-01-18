@@ -3,7 +3,7 @@ import { AllNodes, Node } from "../../types/types";
 
 export const timer = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
-export const animateShortestPath = (
+export const animateShortestPath = async (
   shortestPath: Node[],
   allNodes: AllNodes,
   setAllNodes: (allNodes: AllNodes) => void
@@ -21,5 +21,5 @@ export const animateShortestPath = (
     }
   };
 
-  animateTimeout();
+  await animateTimeout();
 };

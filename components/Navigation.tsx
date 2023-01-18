@@ -1,8 +1,9 @@
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useContext, useState } from "react";
-import { algorithms, mazes } from "../constants/constants";
+import { algorithmInfo, algorithms, mazes } from "../constants/constants";
 import { GlobalContext } from "../context/global.context";
 import { randomizedKruskal } from "../maze-generating-algorithms/randomized-kruskal";
 import {
@@ -27,18 +28,53 @@ import { animateMazeWalls } from "../utils/animation/animate-maze-walls";
 import { animateShortestPath } from "../utils/animation/animate-shortest-path";
 import { constructShortestPath } from "../utils/animation/construct-shortest-path";
 
+// Add MUI Dialog to use as Modal for initial tutorial
+// Add MUI Snackbar for when user takes an action like running algo, or clearing board
+// Add MUI button float bottom right corner that opens info modal
+// Refactor some re-usable code into a utils file (like getStringRowAndCol, setAllNodesAsWalls, etc.)
+// Maybe move the big handle functions to their own files to keep Nav file smaller
+
 export default function Navigation() {
-  const { numRows, numCols, startNode, targetNode, allNodes, setAllNodes } =
-    useContext(GlobalContext);
+  const {
+    numRows,
+    numCols,
+    startNode,
+    targetNode,
+    allNodes,
+    setAllNodes,
+    selectedAlgorithm,
+    setSelectedAlgorithm,
+    loading,
+    setLoading,
+  } = useContext(GlobalContext);
   const [anchorElAlgorithms, setAnchorElAlgorithms] =
     useState<null | HTMLElement>(null);
   const [anchorElMazes, setAnchorElMazes] = useState<null | HTMLElement>(null);
+
+  const clearVisitedCells = () => {
+    const copyOfAllNodes = { ...allNodes };
+    for (const node of Object.values(copyOfAllNodes)) {
+      if (node.isWall) continue;
+      node.distance = 0;
+      node.heuristic = 0;
+      node.aStarDistance = 0;
+      node.isWall = false;
+      node.visiting = false;
+      node.visited = false;
+      node.isCurrent = false;
+      node.prevNode = null;
+      node.isInShortestPath = false;
+    }
+
+    setAllNodes(copyOfAllNodes);
+  };
 
   const handleClickAlgorithms = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     setAnchorElAlgorithms(event.currentTarget);
   };
+
   const handleCloseAlgorithms = () => {
     setAnchorElAlgorithms(null);
   };
@@ -51,8 +87,16 @@ export default function Navigation() {
     setAnchorElMazes(null);
   };
 
+  const handleSelectAlgorithm = (algorithm: string) => {
+    handleCloseAlgorithms();
+    handleCloseMazes();
+    setSelectedAlgorithm(algorithm);
+  };
+
   const handleVisualizeAlgorithms = async (id: string) => {
     handleCloseAlgorithms();
+    clearVisitedCells();
+    setLoading(true);
     let exploredNodes: Node[] = [];
 
     if (algorithms[id] === "dijkstra") {
@@ -100,7 +144,11 @@ export default function Navigation() {
       exploredNodes = aStar(numRows, numCols, startNode, targetNode, allNodes);
     }
 
-    if (!exploredNodes) return;
+    if (!exploredNodes) {
+      setLoading(false);
+      alert("Target not found! Try a different maze.");
+      return;
+    }
 
     if (algorithms[id] !== "bellmanFord") {
       await animateExploredNodes(exploredNodes, allNodes, setAllNodes);
@@ -116,15 +164,22 @@ export default function Navigation() {
       break;
     }
 
-    if (!lastNode) return;
+    if (!lastNode) {
+      setLoading(false);
+      alert("Target not found! Try a different maze.");
+      return;
+    }
 
     const shortestPath = constructShortestPath(lastNode);
-    animateShortestPath(shortestPath, allNodes, setAllNodes);
+    await animateShortestPath(shortestPath, allNodes, setAllNodes);
+    setLoading(false);
   };
 
   const handleVisualizeMazes = async (id: string) => {
     handleCloseMazes();
     handleClearGrid();
+    setSelectedAlgorithm(id);
+    setLoading(true);
     const copyOfAllNodes = { ...allNodes };
 
     let maze: Node[] = [];
@@ -151,6 +206,7 @@ export default function Navigation() {
         copyOfAllNodes
       );
       await animateMazeWalls(maze, allNodes, setAllNodes);
+      setLoading(false);
       return;
     }
 
@@ -191,10 +247,20 @@ export default function Navigation() {
         orientation
       );
       await animateMazeWalls(maze, allNodes, setAllNodes);
+      setLoading(false);
       return;
     }
 
     await animateMazePaths(maze, allNodes, setAllNodes);
+    setLoading(false);
+  };
+
+  const handleVisualizeButton = (algorithm: string) => {
+    if (mazes[algorithm]) {
+      handleVisualizeMazes(algorithm);
+    } else {
+      handleVisualizeAlgorithms(algorithm);
+    }
   };
 
   const handleClearGrid = () => {
@@ -215,84 +281,122 @@ export default function Navigation() {
   };
 
   return (
-    <nav className="bg-slate-600 text-lg min-h-53 mb-30">
-      <div className="px-21 py-21 text-gray-300">Pathfinding Visualizer</div>
-
-      <Button
-        id="algorithms"
-        aria-controls={Boolean(anchorElAlgorithms) ? "algorithms" : undefined}
-        aria-haspopup="true"
-        aria-expanded={Boolean(anchorElAlgorithms) ? "true" : undefined}
-        onClick={handleClickAlgorithms}
-        className="!bg-black !text-[#b3b3b3]"
-      >
-        Algorithms
-      </Button>
-      <Menu
-        id="algorithms"
-        anchorEl={anchorElAlgorithms}
-        open={Boolean(anchorElAlgorithms)}
-        onClose={handleCloseAlgorithms}
-        MenuListProps={{
-          "aria-labelledby": "algorithms",
-        }}
-        className="menu"
-      >
-        <MenuItem onClick={() => handleVisualizeAlgorithms("dijkstra")}>
-          Dijkstra's Algorithm
-        </MenuItem>
-        <MenuItem onClick={() => handleVisualizeAlgorithms("aStar")}>
-          A* Algorithm
-        </MenuItem>
-        <MenuItem onClick={() => handleVisualizeAlgorithms("bellmanFord")}>
-          Bellman-Ford Algorithm
-        </MenuItem>
-        <MenuItem onClick={() => handleVisualizeAlgorithms("depthFirstSearch")}>
-          Depth-First Search
-        </MenuItem>
-        <MenuItem
-          onClick={() => handleVisualizeAlgorithms("breadthFirstSerach")}
+    <nav className="bg-black text-lg min-h-53 mb-30">
+      <div className="ml-6 text-gray-300">pathfindingVisualizer</div>
+      <div className=" hidden md:flex space-x-6">
+        <Button
+          id="algorithms"
+          aria-controls={Boolean(anchorElAlgorithms) ? "algorithms" : undefined}
+          aria-haspopup="true"
+          aria-expanded={Boolean(anchorElAlgorithms) ? "true" : undefined}
+          onClick={handleClickAlgorithms}
+          className="!text-[#b3b3b3] !ml-4"
+          disabled={loading}
+          endIcon={<ExpandMoreIcon />}
         >
-          Breadth-First Search
-        </MenuItem>
-      </Menu>
-      <Button
-        id="mazes"
-        aria-controls={Boolean(anchorElMazes) ? "mazes" : undefined}
-        aria-haspopup="true"
-        aria-expanded={Boolean(anchorElMazes) ? "true" : undefined}
-        onClick={handleClickMazes}
-      >
-        Mazes
-      </Button>
-      <Menu
-        id="mazes"
-        anchorEl={anchorElMazes}
-        open={Boolean(anchorElMazes)}
-        onClose={handleCloseMazes}
-        MenuListProps={{
-          "aria-labelledby": "basic-button",
-        }}
-      >
-        <MenuItem onClick={() => handleVisualizeMazes("prim")}>
-          Randomized Prim's Algorithm
-        </MenuItem>
-        <MenuItem onClick={() => handleVisualizeMazes("kruskal")}>
-          Randomized Kruskal's Algorithm
-        </MenuItem>
-        <MenuItem onClick={() => handleVisualizeMazes("recursiveDivision")}>
-          Recursive Division
-        </MenuItem>
-        <MenuItem onClick={() => handleVisualizeMazes("recursiveBacktracker")}>
-          Recursive Backtracker
-        </MenuItem>
-        <MenuItem onClick={() => handleVisualizeMazes("randomlySelected")}>
-          Randomly Selected
-        </MenuItem>
-      </Menu>
-      <Button id="basic-button" aria-haspopup="false" onClick={handleClearGrid}>
-        Clear Grid
-      </Button>
+          Algorithms
+        </Button>
+        <Menu
+          id="algorithms"
+          anchorEl={anchorElAlgorithms}
+          open={Boolean(anchorElAlgorithms)}
+          onClose={handleCloseAlgorithms}
+          MenuListProps={{
+            "aria-labelledby": "algorithms",
+          }}
+          className="menu"
+        >
+          <MenuItem onClick={() => handleSelectAlgorithm("dijkstra")}>
+            Dijkstra's Algorithm
+          </MenuItem>
+          <MenuItem onClick={() => handleSelectAlgorithm("aStar")}>
+            A* Algorithm
+          </MenuItem>
+          <MenuItem onClick={() => handleSelectAlgorithm("bellmanFord")}>
+            Bellman-Ford Algorithm
+          </MenuItem>
+          <MenuItem onClick={() => handleSelectAlgorithm("depthFirstSearch")}>
+            Depth-First Search
+          </MenuItem>
+          <MenuItem onClick={() => handleSelectAlgorithm("breadthFirstSearch")}>
+            Breadth-First Search
+          </MenuItem>
+        </Menu>
+        <Button
+          id="mazes"
+          aria-controls={Boolean(anchorElMazes) ? "mazes" : undefined}
+          aria-haspopup="true"
+          aria-expanded={Boolean(anchorElMazes) ? "true" : undefined}
+          onClick={handleClickMazes}
+          className="!text-[#b3b3b3] !ml-4"
+          disabled={loading}
+          endIcon={<ExpandMoreIcon />}
+        >
+          Mazes
+        </Button>
+        <Menu
+          id="mazes"
+          anchorEl={anchorElMazes}
+          open={Boolean(anchorElMazes)}
+          onClose={handleCloseMazes}
+          MenuListProps={{
+            "aria-labelledby": "basic-button",
+          }}
+          className="menu"
+        >
+          <MenuItem onClick={() => handleSelectAlgorithm("prim")}>
+            Randomized Prim's Algorithm
+          </MenuItem>
+          <MenuItem onClick={() => handleSelectAlgorithm("kruskal")}>
+            Randomized Kruskal's Algorithm
+          </MenuItem>
+          <MenuItem onClick={() => handleSelectAlgorithm("recursiveDivision")}>
+            Recursive Division
+          </MenuItem>
+          <MenuItem
+            onClick={() => handleSelectAlgorithm("recursiveBacktracker")}
+          >
+            Recursive Backtracker
+          </MenuItem>
+          <MenuItem onClick={() => handleSelectAlgorithm("randomlySelected")}>
+            Randomly Selected
+          </MenuItem>
+        </Menu>
+        <Button
+          id="basic-button"
+          aria-haspopup="false"
+          onClick={handleClearGrid}
+          className="!text-[#b3b3b3] !ml-4"
+          disabled={loading}
+        >
+          Clear Grid
+        </Button>
+        <Button
+          id="basic-button"
+          aria-haspopup="false"
+          onClick={clearVisitedCells}
+          className="!text-[#b3b3b3] !ml-4"
+          disabled={loading}
+        >
+          Clear Paths
+        </Button>
+        <Button
+          id="basic-button"
+          aria-haspopup="false"
+          onClick={() => handleVisualizeButton(selectedAlgorithm)}
+          className="!text-white !ml-4"
+          variant="outlined"
+          disabled={loading}
+        >
+          {loading
+            ? "Loading..."
+            : "Visualize" +
+              (selectedAlgorithm.length > 0
+                ? ` ${algorithmInfo[selectedAlgorithm].title}`
+                : "") +
+              "!"}
+        </Button>
+      </div>
     </nav>
   );
 }
