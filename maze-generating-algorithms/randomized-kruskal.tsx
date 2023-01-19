@@ -3,11 +3,11 @@ Note: we can make this algorithm more efficient by implementing a ranking system
 */
 
 import { distanceTwoDirections, PASSAGE } from "../constants/constants";
-import {
-  getStringRowAndCol,
-  isInbounds,
-} from "../pathfinding-algorithms/dijkstra";
 import { AllNodes, Node } from "../types/types";
+import {
+  getNode,
+  isInbounds,
+} from "../utils/utility-functions/utility-functions";
 import { setAllNodesAsWalls } from "./randomized-prim";
 
 type NodeTuple = [Node, Node];
@@ -20,7 +20,7 @@ const setForestOfPassages = (
 ) => {
   for (let row = 0; row < numRows; row += 2) {
     for (let col = 0; col < numCols; col += 2) {
-      copyOfAllNodes[getStringRowAndCol(row, col)].isWall = PASSAGE;
+      getNode(row, col, copyOfAllNodes).isWall = PASSAGE;
     }
   }
 };
@@ -43,7 +43,7 @@ class DisjointSetUnion {
 
     for (let row = 0; row < numRows; row++) {
       for (let col = 0; col < numCols; col++) {
-        const node = copyOfAllNodes[getStringRowAndCol(row, col)];
+        const node = getNode(row, col, copyOfAllNodes);
         this.parent[row][col] = node;
       }
     }
@@ -89,7 +89,7 @@ const getPassagesDividedByAWall = (
 
       if (!isInbounds(newRow, newCol, numRows, numCols)) continue;
 
-      const neighbor = copyOfAllNodes[getStringRowAndCol(newRow, newCol)];
+      const neighbor = getNode(newRow, newCol, copyOfAllNodes);
       if (neighbor.isWall) continue;
 
       passagesDividedByAWall.push([node, neighbor]);
@@ -132,8 +132,7 @@ export const randomizedKruskal = (
     const inBetweenRow = Math.floor((passage1.row + passage2.row) / 2);
     const inBetweenCol = Math.floor((passage1.col + passage2.col) / 2);
 
-    const inBetweenWall =
-      copyOfAllNodes[getStringRowAndCol(inBetweenRow, inBetweenCol)];
+    const inBetweenWall = getNode(inBetweenRow, inBetweenCol, copyOfAllNodes);
 
     inBetweenWall.isWall = PASSAGE;
     exploredNodes.push(passage2, inBetweenWall, passage1);
@@ -142,10 +141,8 @@ export const randomizedKruskal = (
     dsu.union(inBetweenWall, passage2);
   }
 
-  copyOfAllNodes[getStringRowAndCol(startNode.row, startNode.col)].isWall =
-    false;
-  copyOfAllNodes[getStringRowAndCol(targetNode.row, targetNode.col)].isWall =
-    false;
+  getNode(startNode.row, startNode.col, copyOfAllNodes).isWall = false;
+  getNode(targetNode.row, targetNode.col, copyOfAllNodes).isWall = false;
 
   return exploredNodes;
 };
