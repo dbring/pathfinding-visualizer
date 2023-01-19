@@ -204,6 +204,7 @@ export const tutorialStepData = [
         {
           <a
             className="underline"
+            style={{ textDecorationLine: underline }}
             href="https://github.com/dbring/pathfinding-visualizer"
           >
             GitHub
