@@ -1,9 +1,9 @@
 import { distanceTwoDirections, PASSAGE, WALL } from "../constants/constants";
-import {
-  getStringRowAndCol,
-  isInbounds,
-} from "../pathfinding-algorithms/dijkstra";
 import { AllNodes, Node } from "../types/types";
+import {
+  getNode,
+  isInbounds,
+} from "../utils/utility-functions/utility-functions";
 
 export const setAllNodesAsWalls = (
   startNode: Node,
@@ -33,7 +33,7 @@ const getWallsDistanceTwo = (
 
     if (!isInbounds(newRow, newCol, numRows, numCols)) continue;
 
-    const neighbor = copyOfAllNodes[getStringRowAndCol(newRow, newCol)];
+    const neighbor = getNode(newRow, newCol, copyOfAllNodes);
 
     if (neighbor.isWall === PASSAGE) continue;
 
@@ -58,7 +58,7 @@ const getPassagesDistanceTwo = (
 
     if (!isInbounds(newRow, newCol, numRows, numCols)) continue;
 
-    const neighbor = copyOfAllNodes[getStringRowAndCol(newRow, newCol)];
+    const neighbor = getNode(newRow, newCol, copyOfAllNodes);
 
     if (neighbor.isWall === WALL) continue;
 
@@ -78,13 +78,10 @@ const connectNodes = (
   const inBetweenCol = Math.floor((currentNode.col + passageNode.col) / 2);
 
   currentNode.isWall = PASSAGE;
-  copyOfAllNodes[getStringRowAndCol(inBetweenRow, inBetweenCol)].isWall =
-    PASSAGE;
+  getNode(inBetweenRow, inBetweenCol, copyOfAllNodes).isWall = PASSAGE;
 
   passageNodes.push(currentNode);
-  passageNodes.push(
-    copyOfAllNodes[getStringRowAndCol(inBetweenRow, inBetweenCol)]
-  );
+  passageNodes.push(getNode(inBetweenRow, inBetweenCol, copyOfAllNodes));
 };
 
 export const randomizedPrim = (
@@ -99,7 +96,7 @@ export const randomizedPrim = (
 
   let randomRow = Math.floor(Math.random() * numRows);
   let randomCol = Math.floor(Math.random() * numCols);
-  let randomNode = copyOfAllNodes[getStringRowAndCol(randomRow, randomCol)];
+  let randomNode = getNode(randomRow, randomCol, copyOfAllNodes);
 
   randomNode.isWall = PASSAGE;
 

@@ -1,14 +1,9 @@
-import {
-  adjacentDirections,
-  distanceTwoDirections,
-  PASSAGE,
-  WALL,
-} from "../constants/constants";
-import {
-  getStringRowAndCol,
-  isInbounds,
-} from "../pathfinding-algorithms/dijkstra";
+import { distanceTwoDirections, PASSAGE } from "../constants/constants";
 import { AllNodes, Node } from "../types/types";
+import {
+  getNode,
+  isInbounds,
+} from "../utils/utility-functions/utility-functions";
 import { setAllNodesAsWalls } from "./randomized-prim";
 
 const getWallNeighbors = (
@@ -26,7 +21,7 @@ const getWallNeighbors = (
 
     if (!isInbounds(newRow, newCol, numRows, numCols)) continue;
 
-    const neighboringWall = copyOfAllNodes[getStringRowAndCol(newRow, newCol)];
+    const neighboringWall = getNode(newRow, newCol, copyOfAllNodes);
     if (neighboringWall.isWall === PASSAGE) continue;
 
     neighboringWalls.push(neighboringWall);
@@ -47,7 +42,7 @@ export const recursiveBacktracker = (
 
   let randomRow = Math.floor(Math.random() * numRows);
   let randomCol = Math.floor(Math.random() * numCols);
-  let randomNode = copyOfAllNodes[getStringRowAndCol(randomRow, randomCol)];
+  let randomNode = getNode(randomRow, randomCol, copyOfAllNodes);
 
   const stack = [randomNode];
   const exploredNodes: Node[] = [];
@@ -78,11 +73,8 @@ export const recursiveBacktracker = (
         (currentNode.col + neighboringWall.col) / 2
       );
 
-      copyOfAllNodes[getStringRowAndCol(inBetweenRow, inBetweenCol)].isWall =
-        PASSAGE;
-      exploredNodes.push(
-        copyOfAllNodes[getStringRowAndCol(inBetweenRow, inBetweenCol)]
-      );
+      getNode(inBetweenRow, inBetweenCol, copyOfAllNodes).isWall = PASSAGE;
+      exploredNodes.push(getNode(inBetweenRow, inBetweenCol, copyOfAllNodes));
       stack.push(neighboringWall);
     } else {
       stack.pop();

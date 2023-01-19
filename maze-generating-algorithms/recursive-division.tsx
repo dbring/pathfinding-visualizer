@@ -1,6 +1,5 @@
-import { PASSAGE, WALL } from "../constants/constants";
-import { getStringRowAndCol } from "../pathfinding-algorithms/dijkstra";
 import { AllNodes, Node } from "../types/types";
+import { getNode } from "../utils/utility-functions/utility-functions";
 export const recursiveDivision = (
   startRow: number,
   endRow: number,
@@ -48,8 +47,9 @@ export const recursiveDivision = (
           (wallRow === targetNode.row && col === targetNode.col)
         )
           continue;
-        const node = allNodes[getStringRowAndCol(wallRow, col)];
-        // node.isWall = WALL;
+
+        const node = getNode(wallRow, col, allNodes);
+
         mazeWalls.push(node);
       }
 
@@ -121,8 +121,9 @@ export const recursiveDivision = (
           (row === targetNode.row && wallCol === targetNode.col)
         )
           continue;
-        const node = allNodes[getStringRowAndCol(row, wallCol)];
-        // node.isWall = WALL;
+
+        const node = getNode(row, wallCol, allNodes);
+
         mazeWalls.push(node);
       }
 
