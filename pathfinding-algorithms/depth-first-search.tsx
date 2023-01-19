@@ -1,6 +1,9 @@
 import { adjacentDirections } from "../constants/constants";
 import { AllNodes, Node } from "../types/types";
-import { getStringRowAndCol, isInbounds } from "./dijkstra";
+import {
+  getNode,
+  isInbounds,
+} from "../utils/utility-functions/utility-functions";
 
 export const depthFirstSearch = (
   numRows: number,
@@ -31,7 +34,7 @@ export const depthFirstSearch = (
 
       if (!isInbounds(newRow, newCol, numRows, numCols)) continue;
 
-      const neighbor = allNodes[getStringRowAndCol(newRow, newCol)];
+      const neighbor = getNode(newRow, newCol, allNodes);
 
       if (!neighbor || neighbor.isWall || neighbor.visiting) continue;
 

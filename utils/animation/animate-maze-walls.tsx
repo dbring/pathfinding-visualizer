@@ -1,5 +1,5 @@
-import { getStringRowAndCol } from "../../pathfinding-algorithms/dijkstra";
 import { AllNodes, Node } from "../../types/types";
+import { getNode } from "../utility-functions/utility-functions";
 import { timer } from "./animate-shortest-path";
 
 export const animateMazeWalls = async (
@@ -12,16 +12,16 @@ export const animateMazeWalls = async (
       const { row, col } = node;
       const copyAllNodes = { ...allNodes };
 
-      if (!copyAllNodes[getStringRowAndCol(row, col)]) return;
+      if (!getNode(row, col, copyAllNodes)) return;
 
-      copyAllNodes[getStringRowAndCol(row, col)].isCurrent = true;
+      getNode(row, col, copyAllNodes).isCurrent = true;
       setAllNodes(copyAllNodes);
 
       await timer(0);
 
       const newCopyOfAllNodes = { ...allNodes };
-      newCopyOfAllNodes[getStringRowAndCol(row, col)].isCurrent = false;
-      newCopyOfAllNodes[getStringRowAndCol(row, col)].isWall = true;
+      getNode(row, col, newCopyOfAllNodes).isCurrent = false;
+      getNode(row, col, newCopyOfAllNodes).isWall = true;
       setAllNodes(newCopyOfAllNodes);
     }
   };

@@ -1,6 +1,9 @@
 import { adjacentDirections } from "../constants/constants";
 import { AllNodes, Node } from "../types/types";
-import { getStringRowAndCol, isInbounds } from "./dijkstra";
+import {
+  getNode,
+  isInbounds,
+} from "../utils/utility-functions/utility-functions";
 
 export const breadthFirstSearch = (
   numRows: number,
@@ -33,7 +36,7 @@ export const breadthFirstSearch = (
       const newRow = row + changeRow;
       const newCol = col + changeCol;
 
-      const neighbor = allNodes[getStringRowAndCol(newRow, newCol)];
+      const neighbor = getNode(newRow, newCol, allNodes);
       if (!neighbor) continue;
 
       if (!isInbounds(newRow, newCol, numRows, numCols)) continue;

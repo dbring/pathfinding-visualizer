@@ -1,6 +1,9 @@
 import { adjacentDirections } from "../constants/constants";
 import { AllNodes, Node } from "../types/types";
-import { getStringRowAndCol, isInbounds } from "./dijkstra";
+import {
+  getNode,
+  isInbounds,
+} from "../utils/utility-functions/utility-functions";
 
 export const bellmanFord = (
   numRows: number,
@@ -21,7 +24,7 @@ export const bellmanFord = (
   for (let _ = 0; _ < distances.length - 1; _++) {
     for (let row = 0; row < numRows; row++) {
       for (let col = 0; col < numCols; col++) {
-        const currentNode = allNodes[getStringRowAndCol(row, col)];
+        const currentNode = getNode(row, col, allNodes);
 
         if (currentNode.isWall) continue;
 
@@ -38,7 +41,7 @@ export const bellmanFord = (
 
           if (alt < distances[newRow][newCol]) {
             distances[newRow][newCol] = alt;
-            const neighbor = allNodes[getStringRowAndCol(newRow, newCol)];
+            const neighbor = getNode(newRow, newCol, allNodes);
 
             if (neighbor.isWall) continue;
 

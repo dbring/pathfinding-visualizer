@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { GlobalContext } from "../context/global.context";
-import { getStringRowAndCol } from "../pathfinding-algorithms/dijkstra";
+import { getNode } from "../utils/utility-functions/utility-functions";
 
 type NodeProps = {
   row: number;
@@ -12,12 +12,11 @@ type NodeProps = {
 export const Node = ({ row, col, isStart, isTarget }: NodeProps) => {
   const { allNodes, setAllNodes } = useContext(GlobalContext);
 
-  const currentNode = allNodes[getStringRowAndCol(row, col)];
+  const currentNode = getNode(row, col, allNodes);
 
   const handleAddWall = () => {
     const newNodes = { ...allNodes };
-    newNodes[getStringRowAndCol(row, col)].isWall =
-      !newNodes[getStringRowAndCol(row, col)].isWall;
+    getNode(row, col, newNodes).isWall = !getNode(row, col, newNodes).isWall;
     setAllNodes(newNodes);
   };
 

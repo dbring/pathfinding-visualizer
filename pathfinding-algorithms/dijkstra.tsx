@@ -1,24 +1,13 @@
 import { adjacentDirections } from "../constants/constants";
 import { AllNodes, Node } from "../types/types";
+import {
+  getNode,
+  isInbounds,
+} from "../utils/utility-functions/utility-functions";
 
 const sortHeap = (heap: Node[]) => {
   heap.sort((nodeA, nodeB) => nodeA.distance - nodeB.distance);
 };
-
-export const isInbounds = (
-  row: number,
-  col: number,
-  numRows: number,
-  numCols: number
-) => {
-  const rowInbound = row >= 0 && row < numRows;
-  const colInbound = col >= 0 && col < numCols;
-
-  return rowInbound && colInbound;
-};
-
-export const getStringRowAndCol = (row: number, col: number): string =>
-  `${row},${col}`;
 
 export const dijkstra = (
   numRows: number,
@@ -53,7 +42,7 @@ export const dijkstra = (
       const newRow = row + changeRow;
       const newCol = col + changeCol;
 
-      const neighbor = allNodes[getStringRowAndCol(newRow, newCol)];
+      const neighbor = getNode(newRow, newCol, allNodes);
       if (!neighbor) continue;
 
       if (!isInbounds(newRow, newCol, numRows, numCols)) continue;

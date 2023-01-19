@@ -17,10 +17,7 @@ import { aStar } from "../pathfinding-algorithms/a-star";
 import { bellmanFord } from "../pathfinding-algorithms/bellman-ford";
 import { breadthFirstSearch } from "../pathfinding-algorithms/breadth-first-search";
 import { depthFirstSearch } from "../pathfinding-algorithms/depth-first-search";
-import {
-  dijkstra,
-  getStringRowAndCol,
-} from "../pathfinding-algorithms/dijkstra";
+import { dijkstra } from "../pathfinding-algorithms/dijkstra";
 import { Node } from "../types/types";
 import { animateExploredNodes } from "../utils/animation/animate-exploration";
 import { animateMazePaths } from "../utils/animation/animate-maze-paths";
@@ -29,7 +26,6 @@ import { animateShortestPath } from "../utils/animation/animate-shortest-path";
 import { constructShortestPath } from "../utils/animation/construct-shortest-path";
 
 // Add MUI Snackbar for when user takes an action like running algo, or clearing board
-// Add MUI button float bottom right corner that opens info modal
 // Refactor some re-usable code into a utils file (like getStringRowAndCol, setAllNodesAsWalls, etc.)
 // Maybe move the big handle functions to their own files to keep Nav file smaller
 // Add weight functionality

@@ -1,6 +1,9 @@
 import { adjacentDirections } from "../constants/constants";
 import { AllNodes, Node } from "../types/types";
-import { getStringRowAndCol, isInbounds } from "./dijkstra";
+import {
+  getNode,
+  isInbounds,
+} from "../utils/utility-functions/utility-functions";
 
 const heuristic = (node0: Node, node1: Node): number => {
   const d1 = Math.abs(node1.row - node0.row);
@@ -47,7 +50,7 @@ export const aStar = (
 
       if (!isInbounds(newRow, newCol, numRows, numCols)) continue;
 
-      const neighbor = allNodes[getStringRowAndCol(newRow, newCol)];
+      const neighbor = getNode(newRow, newCol, allNodes);
       if (exploredNodes.includes(neighbor)) continue;
       if (!neighbor || neighbor.isWall) continue;
 

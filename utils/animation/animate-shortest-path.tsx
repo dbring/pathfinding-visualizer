@@ -1,5 +1,5 @@
-import { getStringRowAndCol } from "../../pathfinding-algorithms/dijkstra";
 import { AllNodes, Node } from "../../types/types";
+import { getNode } from "../utility-functions/utility-functions";
 
 export const timer = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
@@ -13,9 +13,9 @@ export const animateShortestPath = async (
       const { row, col } = node;
       const copyAllNodes = { ...allNodes };
 
-      if (!copyAllNodes[getStringRowAndCol(row, col)]) return;
+      if (!getNode(row, col, copyAllNodes)) return;
 
-      copyAllNodes[getStringRowAndCol(row, col)].isInShortestPath = true;
+      getNode(row, col, copyAllNodes).isInShortestPath = true;
       setAllNodes(copyAllNodes);
       await timer(0);
     }
