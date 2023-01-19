@@ -6,10 +6,7 @@ import { useContext, useState } from "react";
 import { algorithmInfo, algorithms, mazes } from "../constants/constants";
 import { GlobalContext } from "../context/global.context";
 import { randomizedKruskal } from "../maze-generating-algorithms/randomized-kruskal";
-import {
-  randomizedPrim,
-  setAllNodesAsWalls,
-} from "../maze-generating-algorithms/randomized-prim";
+import { randomizedPrim } from "../maze-generating-algorithms/randomized-prim";
 import { generateRandomMaze } from "../maze-generating-algorithms/randomly-selected";
 import { recursiveBacktracker } from "../maze-generating-algorithms/recursive-backtracker";
 import { recursiveDivision } from "../maze-generating-algorithms/recursive-division";
@@ -24,12 +21,12 @@ import { animateMazePaths } from "../utils/animation/animate-maze-paths";
 import { animateMazeWalls } from "../utils/animation/animate-maze-walls";
 import { animateShortestPath } from "../utils/animation/animate-shortest-path";
 import { constructShortestPath } from "../utils/animation/construct-shortest-path";
+import { setAllNodesAsWalls } from "../utils/utility-functions/utility-functions";
 
 // Add MUI Snackbar for clearing board
 // Maybe move the big handle functions to their own files to keep Nav file smaller
 // Add weight functionality
 // Add images to tutorial
-// Fix tutorial flash
 
 export default function Navigation() {
   const {
@@ -272,8 +269,22 @@ export default function Navigation() {
       node.isCurrent = false;
       node.prevNode = null;
       node.isInShortestPath = false;
+      node.weight = 0;
     }
 
+    setAllNodes(copyOfAllNodes);
+  };
+
+  const handleSetWeights = () => {
+    const copyOfAllNodes = { ...allNodes };
+
+    for (const node of Object.values(copyOfAllNodes)) {
+      const { row, col } = node;
+      if (row === startNode.row && col === startNode.col) continue;
+      if (row === targetNode.row && col === targetNode.col) continue;
+
+      node.weight = Math.floor(Math.random() * 10) + 1;
+    }
     setAllNodes(copyOfAllNodes);
   };
 
@@ -376,6 +387,15 @@ export default function Navigation() {
           disabled={loading}
         >
           Clear Paths
+        </Button>
+        <Button
+          id="basic-button"
+          aria-haspopup="false"
+          onClick={handleSetWeights}
+          className="!text-[#b3b3b3] !ml-4"
+          disabled={loading}
+        >
+          Set Weights
         </Button>
         <Button
           id="basic-button"

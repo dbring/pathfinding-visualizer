@@ -37,11 +37,12 @@ export const bellmanFord = (
           const newCol = col + changeCol;
 
           if (!isInbounds(newRow, newCol, numRows, numCols)) continue;
-          const alt = distances[row][col] + 1;
+
+          const neighbor = getNode(newRow, newCol, allNodes);
+          const alt = distances[row][col] + neighbor.weight;
 
           if (alt < distances[newRow][newCol]) {
             distances[newRow][newCol] = alt;
-            const neighbor = getNode(newRow, newCol, allNodes);
 
             if (neighbor.isWall) continue;
 

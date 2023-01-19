@@ -3,8 +3,8 @@ import { AllNodes, Node } from "../types/types";
 import {
   getNode,
   isInbounds,
+  setAllNodesAsWalls,
 } from "../utils/utility-functions/utility-functions";
-import { setAllNodesAsWalls } from "./randomized-prim";
 
 const getWallNeighbors = (
   numRows: number,

@@ -10,7 +10,7 @@ export const Legend = () => {
         <div>Target Node</div>
       </div>
       <div className="flex flex-row space-x-2">
-        <div className="legend-unvisited"></div>
+        <div className="border legend-unvisited"></div>
         <div>Unvisited/Passage Node</div>
       </div>
       <div className="flex flex-row space-x-2">

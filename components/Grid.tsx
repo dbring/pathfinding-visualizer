@@ -11,7 +11,7 @@ export const Grid = () => {
   const { row: targetRow, col: targetCol } = targetNode;
 
   return (
-    <table className="table-fixed">
+    <table className="table-fixed mx-auto">
       <tbody>
         {rowArray.map((_, i) => {
           return (

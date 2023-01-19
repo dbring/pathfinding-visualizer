@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { GlobalContext } from "../context/global.context";
 import { getNode } from "../utils/utility-functions/utility-functions";
 
@@ -12,7 +12,11 @@ type NodeProps = {
 export const Node = ({ row, col, isStart, isTarget }: NodeProps) => {
   const { allNodes, setAllNodes } = useContext(GlobalContext);
 
-  const currentNode = getNode(row, col, allNodes);
+  let currentNode = getNode(row, col, allNodes);
+
+  useEffect(() => {
+    currentNode = getNode(row, col, allNodes);
+  }, [allNodes]);
 
   const handleAddWall = () => {
     const newNodes = { ...allNodes };
@@ -23,11 +27,16 @@ export const Node = ({ row, col, isStart, isTarget }: NodeProps) => {
   return (
     <div
       id={`node-${row}-${col}`}
-      className={`${currentNode && currentNode.isWall && "wall"} ${
-        isStart && "start"
-      } ${isTarget && "target"} ${
-        currentNode && currentNode.visited && "visited"
+      style={
+        currentNode && {
+          backgroundColor: `rgba(255, 167, 38, ${currentNode.weight / 10})`,
+        }
       }
+      className={`
+      ${currentNode && currentNode.isWall && "wall"} 
+      ${isStart && "start"} 
+      ${isTarget && "target"} 
+      ${currentNode && currentNode.visited && "visited"}
       ${currentNode && currentNode.isCurrent && "current"}
       ${currentNode && currentNode.isInShortestPath && "shortest-path"}
       w-[20px] h-[20px]`}

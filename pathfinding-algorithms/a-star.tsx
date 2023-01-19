@@ -56,11 +56,11 @@ export const aStar = (
 
       if (!openSet.includes(neighbor)) {
         openSet.push(neighbor);
-      } else if (currentDistance + 1 >= neighbor.distance) {
+      } else if (currentDistance + neighbor.weight >= neighbor.distance) {
         continue;
       }
 
-      neighbor.distance = currentDistance + 1;
+      neighbor.distance = currentDistance + neighbor.weight;
       neighbor.heuristic = heuristic(neighbor, targetNode);
       neighbor.aStarDistance = neighbor.distance + neighbor.heuristic;
       neighbor.prevNode = currentNode;

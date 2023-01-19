@@ -158,6 +158,10 @@
     animation-play-state: running;
   }
 
+  .weighted {
+    background-color: rgba(0, 217, 159, 0.75);
+  }
+
   .visitedobject {
     /*background:red*/
     border: 1px solid rgb(175, 216, 248);
@@ -211,7 +215,7 @@
   }
 
   .legend-unvisited {
-    background-color: rgb(71, 85, 105);
+    background-color: white;
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;

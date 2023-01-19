@@ -2,7 +2,6 @@ import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import {
   Button,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
@@ -55,22 +54,21 @@ export const TutorialModal = () => {
         position="static"
         activeStep={step}
         nextButton={
-          <Button size="small" onClick={nextStep} disabled={step === 5}>
-            Next
-            {theme.direction === "rtl" ? (
-              <KeyboardArrowLeft />
-            ) : (
+          step === 5 ? (
+            <Button size="small" onClick={handleClose}>
+              Finish Tutorial
               <KeyboardArrowRight />
-            )}
-          </Button>
+            </Button>
+          ) : (
+            <Button size="small" onClick={nextStep}>
+              Next
+              <KeyboardArrowRight />
+            </Button>
+          )
         }
         backButton={
           <Button size="small" onClick={prevStep} disabled={step === 0}>
-            {theme.direction === "rtl" ? (
-              <KeyboardArrowRight />
-            ) : (
-              <KeyboardArrowLeft />
-            )}
+            <KeyboardArrowLeft />
             Back
           </Button>
         }

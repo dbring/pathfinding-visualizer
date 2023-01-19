@@ -1,4 +1,5 @@
-import { AllNodes } from "../../types/types";
+import { WALL } from "../../constants/constants";
+import { AllNodes, Node } from "../../types/types";
 
 export const getStringRowAndCol = (row: number, col: number): string =>
   `${row},${col}`;
@@ -17,4 +18,17 @@ export const isInbounds = (
   const colInbound = col >= 0 && col < numCols;
 
   return rowInbound && colInbound;
+};
+
+export const setAllNodesAsWalls = (
+  startNode: Node,
+  targetNode: Node,
+  allNodes: AllNodes
+) => {
+  for (const node of Object.values(allNodes)) {
+    const { row, col } = node;
+    if (row === startNode.row && col === startNode.col) continue;
+    if (row === targetNode.row && col === targetNode.col) continue;
+    node.isWall = WALL;
+  }
 };

@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { CELL_SIZE } from "../constants/constants";
 import { AllNodes, Node } from "../types/types";
+import { getStringRowAndCol } from "../utils/utility-functions/utility-functions";
 
 interface IGlobal {
   numRows: number;
@@ -29,6 +30,7 @@ const initialNode: Node = {
   isCurrent: false,
   prevNode: null,
   isInShortestPath: false,
+  weight: 0,
 };
 
 export const GlobalContext = createContext<IGlobal>({
@@ -88,6 +90,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
       isCurrent: false,
       prevNode: null,
       isInShortestPath: false,
+      weight: 0,
     });
 
     const targetRow = Math.floor(Math.random() * numRows);
@@ -104,12 +107,13 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
       isCurrent: false,
       prevNode: null,
       isInShortestPath: false,
+      weight: 0,
     });
 
     const listOfAllNodes: AllNodes = {};
     for (let row = 0; row < numRows; row++) {
       for (let col = 0; col < numCols; col++) {
-        listOfAllNodes[`${row},${col}`] = {
+        listOfAllNodes[getStringRowAndCol(row, col)] = {
           row: parseInt(`${row}`),
           col: parseInt(`${col}`),
           distance: 0,
@@ -121,6 +125,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
           isCurrent: false,
           prevNode: null,
           isInShortestPath: false,
+          weight: 0,
         };
       }
     }

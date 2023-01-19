@@ -14,10 +14,14 @@ export const FloatingTutorial = () => {
   return (
     <Box
       sx={{ "& > :not(style)": { m: 1 } }}
-      className="fixed bottom-10 right-[100px] m-0"
+      className="relative"
       onClick={handleClick}
     >
-      <Fab color="info" aria-label="add" className="bg-[#0863a9]">
+      <Fab
+        color="info"
+        aria-label="add"
+        className="bg-[#0863a9] fixed bottom-5 right-5"
+      >
         <QuestionMark />
       </Fab>
     </Box>

@@ -10,6 +10,7 @@ export interface Node {
   isCurrent: boolean;
   prevNode: Node | null;
   isInShortestPath: boolean;
+  weight: number;
 }
 
 export interface AllNodes {

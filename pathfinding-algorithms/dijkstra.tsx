@@ -48,7 +48,7 @@ export const dijkstra = (
       if (!isInbounds(newRow, newCol, numRows, numCols)) continue;
       if (neighbor.isWall || neighbor.visiting) continue;
 
-      neighbor.distance = currentDistance + 1;
+      neighbor.distance = currentDistance + neighbor.weight;
       neighbor.prevNode = currentNode;
       neighbor.visiting = true;
       heap.push(neighbor);

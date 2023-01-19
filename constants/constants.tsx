@@ -60,7 +60,7 @@ export const algorithmInfo: AlgorithmInfo = {
   dijkstra: {
     title: "Dijkstra's Algorithm",
     description:
-      "Dijkstra's Algorithm finds the shortest path from the start node to all other nodes, including the target node, in positively-weighted graph.",
+      "Dijkstra's Algorithm finds the shortest path from the start node to all other nodes, including the target node, in a positively-weighted graph.",
   },
   aStar: {
     title: "A* Algorithm",
@@ -167,8 +167,11 @@ export const tutorialStepData = [
         <br />
         Walls are impenetrable, meaning that a path cannot cross through them.
         Weights, however, are not impassable. They are simply more "costly" to
-        move through. In this application, moving through a weight node has a
-        "cost" of 15.
+        move through.
+        <br />
+        <br />
+        Weighted cells are colored orange, where the darker the orange color is,
+        the more costly it is to visit.
       </>
     ),
   },
@@ -180,8 +183,8 @@ export const tutorialStepData = [
         things!
         <br />
         <br />
-        You can clear the current path or clear the entire grid, all from the
-        navigation bar.
+        You can clear the current path, clear the entire grid, or set new random
+        weights all from the navigation bar.
         <br />
         <br />
         If you want to access this tutorial again, click on the "?" in the

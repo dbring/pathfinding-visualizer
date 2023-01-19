@@ -3,20 +3,8 @@ import { AllNodes, Node } from "../types/types";
 import {
   getNode,
   isInbounds,
+  setAllNodesAsWalls,
 } from "../utils/utility-functions/utility-functions";
-
-export const setAllNodesAsWalls = (
-  startNode: Node,
-  targetNode: Node,
-  copyOfAllNodes: AllNodes
-) => {
-  for (const node of Object.values(copyOfAllNodes)) {
-    const { row, col } = node;
-    if (row === startNode.row && col === startNode.col) continue;
-    if (row === targetNode.row && col === targetNode.col) continue;
-    node.isWall = WALL;
-  }
-};
 
 const getWallsDistanceTwo = (
   numRows: number,
