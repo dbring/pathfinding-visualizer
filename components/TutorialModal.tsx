@@ -1,15 +1,22 @@
+import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  MobileStepper,
+  useTheme,
+} from "@mui/material";
 import { useContext, useState } from "react";
+import { tutorialStepData } from "../constants/constants";
 import { GlobalContext } from "../context/global.context";
-import { TutorialPage1 } from "./TutorialPage1";
-import { TutorialPage2 } from "./TutorialPage2";
-import { TutorialPage3 } from "./TutorialPage3";
-import { TutorialPage4 } from "./TutorialPage4";
-import { TutorialPage5 } from "./TutorialPage5";
-import { TutorialPage6 } from "./TutorialPage6";
 
 export const TutorialModal = () => {
   const { isTutorialOpen, setIsTutorialOpen } = useContext(GlobalContext);
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0);
+  const theme = useTheme();
 
   const prevStep = () => {
     const prev = step - 1;
@@ -22,64 +29,52 @@ export const TutorialModal = () => {
   };
 
   const handleClose = () => {
-    setStep(1);
+    setStep(0);
     setIsTutorialOpen(false);
   };
 
-  switch (step) {
-    case 1:
-      return (
-        <TutorialPage1
-          open={isTutorialOpen}
-          nextStep={nextStep}
-          handleClose={handleClose}
-        />
-      );
-    case 2:
-      return (
-        <TutorialPage2
-          open={isTutorialOpen}
-          prevStep={prevStep}
-          nextStep={nextStep}
-          handleClose={handleClose}
-        />
-      );
-    case 3:
-      return (
-        <TutorialPage3
-          open={isTutorialOpen}
-          prevStep={prevStep}
-          nextStep={nextStep}
-          handleClose={handleClose}
-        />
-      );
-    case 4:
-      return (
-        <TutorialPage4
-          open={isTutorialOpen}
-          prevStep={prevStep}
-          nextStep={nextStep}
-          handleClose={handleClose}
-        />
-      );
-    case 5:
-      return (
-        <TutorialPage5
-          open={isTutorialOpen}
-          prevStep={prevStep}
-          nextStep={nextStep}
-          handleClose={handleClose}
-        />
-      );
-    case 6:
-      return (
-        <TutorialPage6
-          open={isTutorialOpen}
-          prevStep={prevStep}
-          handleClose={handleClose}
-        />
-      );
-    default:
-      return <></>;
-  }
+  return (
+    <Dialog
+      open={isTutorialOpen}
+      onClose={handleClose}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">
+        {tutorialStepData.filter((_, index) => index === step)[0].title}
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+          {tutorialStepData.filter((_, index) => index === step)[0].description}
+        </DialogContentText>
+      </DialogContent>
+
+      <MobileStepper
+        variant="dots"
+        steps={6}
+        position="static"
+        activeStep={step}
+        nextButton={
+          <Button size="small" onClick={nextStep} disabled={step === 5}>
+            Next
+            {theme.direction === "rtl" ? (
+              <KeyboardArrowLeft />
+            ) : (
+              <KeyboardArrowRight />
+            )}
+          </Button>
+        }
+        backButton={
+          <Button size="small" onClick={prevStep} disabled={step === 0}>
+            {theme.direction === "rtl" ? (
+              <KeyboardArrowRight />
+            ) : (
+              <KeyboardArrowLeft />
+            )}
+            Back
+          </Button>
+        }
+      />
+    </Dialog>
+  );
 };

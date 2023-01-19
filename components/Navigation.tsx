@@ -25,10 +25,11 @@ import { animateMazeWalls } from "../utils/animation/animate-maze-walls";
 import { animateShortestPath } from "../utils/animation/animate-shortest-path";
 import { constructShortestPath } from "../utils/animation/construct-shortest-path";
 
-// Add MUI Snackbar for when user takes an action like running algo, or clearing board
-// Refactor some re-usable code into a utils file (like getStringRowAndCol, setAllNodesAsWalls, etc.)
+// Add MUI Snackbar for clearing board
 // Maybe move the big handle functions to their own files to keep Nav file smaller
 // Add weight functionality
+// Add images to tutorial
+// Fix tutorial flash
 
 export default function Navigation() {
   const {
@@ -278,7 +279,7 @@ export default function Navigation() {
 
   return (
     <nav className="bg-black text-lg min-h-53 mb-30">
-      <div className="ml-6 text-gray-300">pathfindingVisualizer</div>
+      <div className="ml-6 text-gray-300">Pathfinder and Maze Visualizer</div>
       <div className=" hidden md:flex space-x-6">
         <Button
           id="algorithms"
