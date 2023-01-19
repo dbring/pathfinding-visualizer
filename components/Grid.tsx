@@ -11,13 +11,13 @@ export const Grid = () => {
   const { row: targetRow, col: targetCol } = targetNode;
 
   return (
-    <table className="table-fixed bg-slate-400">
+    <table className="table-fixed">
       <tbody>
         {rowArray.map((_, i) => {
           return (
-            <tr key={i} className="bg-slate-600">
+            <tr key={i}>
               {colArray.map((_, j) => (
-                <td key={j} className="border border-slate-300">
+                <td key={j} className="border">
                   <Node
                     key={`${i}-${j}`}
                     row={i}

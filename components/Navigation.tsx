@@ -28,11 +28,11 @@ import { animateMazeWalls } from "../utils/animation/animate-maze-walls";
 import { animateShortestPath } from "../utils/animation/animate-shortest-path";
 import { constructShortestPath } from "../utils/animation/construct-shortest-path";
 
-// Add MUI Dialog to use as Modal for initial tutorial
 // Add MUI Snackbar for when user takes an action like running algo, or clearing board
 // Add MUI button float bottom right corner that opens info modal
 // Refactor some re-usable code into a utils file (like getStringRowAndCol, setAllNodesAsWalls, etc.)
 // Maybe move the big handle functions to their own files to keep Nav file smaller
+// Add weight functionality
 
 export default function Navigation() {
   const {

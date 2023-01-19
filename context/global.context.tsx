@@ -13,6 +13,8 @@ interface IGlobal {
   setSelectedAlgorithm: (algorithm: string) => void;
   loading: boolean;
   setLoading: (loading: boolean) => void;
+  isTutorialOpen: boolean;
+  setIsTutorialOpen: (isTutorialOpen: boolean) => void;
 }
 
 const initialNode: Node = {
@@ -40,6 +42,8 @@ export const GlobalContext = createContext<IGlobal>({
   setSelectedAlgorithm: () => {},
   loading: false,
   setLoading: () => {},
+  isTutorialOpen: true,
+  setIsTutorialOpen: () => {},
 });
 
 interface GlobalProviderProps {
@@ -56,6 +60,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
   const [allNodes, setAllNodes] = useState({});
   const [selectedAlgorithm, setSelectedAlgorithm] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isTutorialOpen, setIsTutorialOpen] = useState(true);
 
   useEffect(() => {
     const { innerWidth, innerHeight } = window;
@@ -135,6 +140,8 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
         setSelectedAlgorithm,
         loading,
         setLoading,
+        isTutorialOpen,
+        setIsTutorialOpen,
       }}
     >
       {children}

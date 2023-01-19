@@ -60,7 +60,7 @@ export const algorithmInfo: AlgorithmInfo = {
   dijkstra: {
     title: "Dijkstra's Algorithm",
     description:
-      "Dijkstra's Algorithm finds the shortest path between two nodes in a positively-weighted graph.",
+      "Dijkstra's Algorithm finds the shortest path from the start node to all other nodes, including the target node, in positively-weighted graph.",
   },
   aStar: {
     title: "A* Algorithm",
@@ -80,7 +80,7 @@ export const algorithmInfo: AlgorithmInfo = {
   breadthFirstSearch: {
     title: "Breadth-First Search",
     description:
-      "Breadth-First Search finds the shortest path to the target node in an unweighted graph.",
+      "Breadth-First Search finds the shortest path from the start node to all other nodes, including the target node, in an unweighted graph.",
   },
   prim: {
     title: "Randomized Prim's Algorithm",
@@ -90,7 +90,7 @@ export const algorithmInfo: AlgorithmInfo = {
   kruskal: {
     title: "Randomized Kruskal's Algorithm",
     description:
-      "Starting with a graph of walls, the Randomized Kruskal's Algorithm uses the Union-Find data structure to build up a minimum spanning tree maze from a forest of passages.",
+      "Starting with a graph of walls, the Randomized Kruskal's Algorithm uses the Union-Find data structure to build up a minimum spanning tree maze from a collection of passages.",
   },
   recursiveDivision: {
     title: "Recursive Division",

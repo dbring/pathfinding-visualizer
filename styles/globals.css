@@ -99,6 +99,8 @@
   }
 
   .wall {
+    padding: 0 !important;
+    border: none !important;
     animation-name: wallAnimation;
     animation-duration: 0.3s;
     animation-timing-function: ease-out;
@@ -145,7 +147,7 @@
   }
 
   .visited {
-    border: 1px solid rgb(175, 216, 248);
+    border: none !important;
     animation-name: visitedAnimation;
     animation-duration: 1.5s;
     animation-timing-function: ease-out;
@@ -188,6 +190,60 @@
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
     animation-play-state: running;
+  }
+
+  .legend-start {
+    background-image: url(../assets/start-arrow.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 25px;
+    height: 25px;
+  }
+
+  .legend-target {
+    background-image: url(../assets/target.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 25px;
+    height: 25px;
+  }
+
+  .legend-unvisited {
+    background-color: rgb(71, 85, 105);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 25px;
+    height: 25px;
+  }
+
+  .legend-visited {
+    background-color: rgba(0, 190, 218, 0.75);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 25px;
+    height: 25px;
+  }
+
+  .legend-wall {
+    background-color: rgb(12, 53, 71);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 25px;
+    height: 25px;
+  }
+
+  .legend-shortest-path {
+    background-color: rgb(255, 254, 106);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 25px;
+    height: 25px;
   }
 
   /* .menu .MuiPaper-root {

@@ -1,8 +1,6 @@
-import { useContext, useEffect, useState } from "react";
-import { CELL_SIZE } from "../constants/constants";
+import { useContext } from "react";
 import { GlobalContext } from "../context/global.context";
-
-// NEED TO MAKE DIV W AND H DYNAMIC BASED ON CELL SIZE
+import { getStringRowAndCol } from "../pathfinding-algorithms/dijkstra";
 
 type NodeProps = {
   row: number;
@@ -14,11 +12,12 @@ type NodeProps = {
 export const Node = ({ row, col, isStart, isTarget }: NodeProps) => {
   const { allNodes, setAllNodes } = useContext(GlobalContext);
 
-  const currentNode = allNodes[`${row},${col}`];
+  const currentNode = allNodes[getStringRowAndCol(row, col)];
 
   const handleAddWall = () => {
     const newNodes = { ...allNodes };
-    newNodes[`${row},${col}`].isWall = !newNodes[`${row},${col}`].isWall;
+    newNodes[getStringRowAndCol(row, col)].isWall =
+      !newNodes[getStringRowAndCol(row, col)].isWall;
     setAllNodes(newNodes);
   };
 
