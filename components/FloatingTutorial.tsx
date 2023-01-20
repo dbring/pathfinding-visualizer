@@ -12,11 +12,7 @@ export const FloatingTutorial = () => {
   };
 
   return (
-    <Box
-      sx={{ "& > :not(style)": { m: 1 } }}
-      className="relative"
-      onClick={handleClick}
-    >
+    <Box sx={{ "& > :not(style)": { m: 1 } }} onClick={handleClick}>
       <Fab
         color="info"
         aria-label="add"
