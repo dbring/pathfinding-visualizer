@@ -16,7 +16,7 @@ export const FloatingTutorial = () => {
       <Fab
         color="info"
         aria-label="add"
-        className="bg-[#0863a9] fixed bottom-5 right-5"
+        className="bg-[#0863a9] fixed bottom-5 right-5 float-right"
       >
         <QuestionMark />
       </Fab>
