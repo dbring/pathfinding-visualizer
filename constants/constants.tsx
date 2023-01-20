@@ -50,6 +50,7 @@ export const mazes: mazes = {
   recursiveBacktracker: "recursiveBacktracker",
   recursiveDivision: "recursiveDivision",
   randomlySelected: "randomlySelected",
+  aldousBroder: "aldousBroder",
 };
 
 interface AlgorithmInfo {
@@ -81,6 +82,11 @@ export const algorithmInfo: AlgorithmInfo = {
     title: "Breadth-First Search",
     description:
       "Breadth-First Search finds the shortest path from the start node to all other nodes, including the target node, in an unweighted graph.",
+  },
+  aldousBroder: {
+    title: "Aldous-Broder's Algorithm",
+    description:
+      "The Aldous-Broder Algorithm constucts a uniform spanning tree (i.e. a randomly chosen spanning tree from all possible spanning trees) of passages from the graph via a random walk.",
   },
   prim: {
     title: "Randomized Prim's Algorithm",

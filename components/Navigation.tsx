@@ -5,6 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { useContext, useState } from "react";
 import { algorithmInfo, algorithms, mazes } from "../constants/constants";
 import { GlobalContext } from "../context/global.context";
+import { aldousBroder } from "../maze-generating-algorithms/aldous-broder";
 import { randomizedKruskal } from "../maze-generating-algorithms/randomized-kruskal";
 import { randomizedPrim } from "../maze-generating-algorithms/randomized-prim";
 import { generateRandomMaze } from "../maze-generating-algorithms/randomly-selected";
@@ -25,8 +26,8 @@ import { setAllNodesAsWalls } from "../utils/utility-functions/utility-functions
 
 // Add MUI Snackbar for clearing board
 // Maybe move the big handle functions to their own files to keep Nav file smaller
-// Add weight functionality
 // Add images to tutorial
+// Add more maze gen algos - Aldos-Broder, Growing Tree, Hunt-and-Kill, Wilson's, Eller's, Binary Tree, Sidewinder
 
 export default function Navigation() {
   const {
@@ -177,6 +178,12 @@ export default function Navigation() {
     const copyOfAllNodes = { ...allNodes };
 
     let maze: Node[] = [];
+
+    if (mazes[id] === "aldousBroder") {
+      // animate path
+      maze = aldousBroder(numRows, numCols, copyOfAllNodes);
+      setAllNodesAsWalls(startNode, targetNode, copyOfAllNodes);
+    }
 
     if (mazes[id] === "prim") {
       // animates path
@@ -352,6 +359,9 @@ export default function Navigation() {
           }}
           className="menu"
         >
+          <MenuItem onClick={() => handleSelectAlgorithm("aldousBroder")}>
+            Aldous-Broder's Algorithm
+          </MenuItem>
           <MenuItem onClick={() => handleSelectAlgorithm("prim")}>
             Randomized Prim's Algorithm
           </MenuItem>
