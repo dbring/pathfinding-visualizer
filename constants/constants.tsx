@@ -214,8 +214,8 @@ export const tutorialStepData = [
         I hope you have just as much fun playing around with this visualization
         tool as I had building it!
         <br />
-        <br /> This app was built using Next.js, TypeScript, and the Material UI
-        library.
+        <br /> This app was built using Next.js, TypeScript, TailwindCSS, and
+        the Material UI library.
         <br />
         <br />
         If you want to see the source code for this application, check out my{" "}

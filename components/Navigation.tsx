@@ -24,11 +24,10 @@ import { animateShortestPath } from "../utils/animation/animate-shortest-path";
 import { constructShortestPath } from "../utils/animation/construct-shortest-path";
 import { setAllNodesAsWalls } from "../utils/utility-functions/utility-functions";
 
-// Add MUI Snackbar for clearing board
-// Maybe move the big handle functions to their own files to keep Nav file smaller
-// Add images to tutorial
+// Add MUI Snackbar for clearing board, clearing paths, setting weights, and clearing weights
+// Add more images to tutorial
 // Add more maze gen algos - Growing Tree, Hunt-and-Kill, Wilson's, Eller's, Binary Tree, Sidewinder
-// Make nav look better and visualize button more eye catching
+// Make nav look better - make logo
 
 export default function Navigation() {
   const {
@@ -439,12 +438,12 @@ export default function Navigation() {
           </Button>
         </div>
       </nav>
-      <div className="text-center">
+      <div className="text-center mt-3">
         <Button
           id="basic-button"
           aria-haspopup="false"
           onClick={() => handleVisualizeButton(selectedAlgorithm)}
-          className={`!text-white w-auto mx-auto mt-3 ${
+          className={`!text-white ${
             selectedAlgorithm.length && "bg-blue-500 hover:bg-blue-600"
           }`}
           variant="contained"
