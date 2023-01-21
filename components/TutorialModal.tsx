@@ -9,10 +9,12 @@ import {
   useTheme,
 } from "@mui/material";
 import { useContext, useState } from "react";
+import tutorialPage1Image from "../assets/tutorial-1.jpeg";
 import { tutorialStepData } from "../constants/constants";
 import { GlobalContext } from "../context/global.context";
 
 export const TutorialModal = () => {
+  console.log(tutorialPage1Image);
   const { isTutorialOpen, setIsTutorialOpen } = useContext(GlobalContext);
   const [step, setStep] = useState(0);
   const theme = useTheme();
@@ -45,6 +47,8 @@ export const TutorialModal = () => {
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           {tutorialStepData.filter((_, index) => index === step)[0].description}
+
+          {tutorialStepData.filter((_, index) => index === step)[0].image}
         </DialogContentText>
       </DialogContent>
 

@@ -11,10 +11,13 @@ export const Legend = () => {
       </div>
       <div className="flex flex-row space-x-2">
         <div className="border legend-unvisited"></div>
-        <div>Unvisited/Passage Node</div>
+        <div>Unvisited Node</div>
       </div>
       <div className="flex flex-row space-x-2">
         <div className="legend-visited"></div> <div>Visited Node</div>
+      </div>
+      <div className="flex flex-row space-x-2">
+        <div className="legend-weighted"></div> <div>Weight Node</div>
       </div>
       <div className="flex flex-row space-x-2">
         <div className="legend-wall"></div> <div>Wall Node</div>

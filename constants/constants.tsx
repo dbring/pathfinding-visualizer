@@ -1,3 +1,5 @@
+import tutorialPage1Image from "../assets/tutorial-1.jpeg";
+
 export const PASSAGE = false;
 export const WALL = true;
 
@@ -129,6 +131,13 @@ export const tutorialStepData = [
         <br />
         <br />
         Otherwise, press "Next"!
+        <br />
+        <br />
+      </>
+    ),
+    image: (
+      <>
+        <img src={tutorialPage1Image.src} />
       </>
     ),
   },
@@ -158,8 +167,8 @@ export const tutorialStepData = [
         grid with information about the selected algorithm.
         <br />
         <br />
-        Click the "Visualize" button in the navigation bar to start running the
-        selected algorithm.
+        Click the "Visualize" button below the navigation bar to start running
+        the selected algorithm.
       </>
     ),
   },
