@@ -14,7 +14,6 @@ import { tutorialStepData } from "../constants/constants";
 import { GlobalContext } from "../context/global.context";
 
 export const TutorialModal = () => {
-  console.log(tutorialPage1Image);
   const { isTutorialOpen, setIsTutorialOpen } = useContext(GlobalContext);
   const [step, setStep] = useState(0);
   const theme = useTheme();

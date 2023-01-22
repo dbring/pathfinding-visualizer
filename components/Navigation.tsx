@@ -1,10 +1,8 @@
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
-import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import Snackbar from "@mui/material/Snackbar";
 import { useContext, useState } from "react";
 import { algorithmInfo, algorithms, mazes } from "../constants/constants";
 import { GlobalContext } from "../context/global.context";
@@ -23,10 +21,7 @@ import { Node } from "../types/types";
 import { animateExploredNodes } from "../utils/animation/animate-exploration";
 import { animateMazePaths } from "../utils/animation/animate-maze-paths";
 import { animateMazeWalls } from "../utils/animation/animate-maze-walls";
-import {
-  animateShortestPath,
-  timer,
-} from "../utils/animation/animate-shortest-path";
+import { animateShortestPath } from "../utils/animation/animate-shortest-path";
 import { constructShortestPath } from "../utils/animation/construct-shortest-path";
 import { setAllNodesAsWalls } from "../utils/utility-functions/utility-functions";
 
@@ -54,25 +49,6 @@ export default function Navigation() {
     useState<null | HTMLElement>(null);
   const [anchorElMazes, setAnchorElMazes] = useState<null | HTMLElement>(null);
 
-  const clearVisitedCells = () => {
-    setSelectedGridAction("pathCleared");
-    const copyOfAllNodes = { ...allNodes };
-    for (const node of Object.values(copyOfAllNodes)) {
-      if (node.isWall) continue;
-      node.distance = 0;
-      node.heuristic = 0;
-      node.aStarDistance = 0;
-      node.isWall = false;
-      node.visiting = false;
-      node.visited = false;
-      node.isCurrent = false;
-      node.prevNode = null;
-      node.isInShortestPath = false;
-    }
-
-    setAllNodes(copyOfAllNodes);
-  };
-
   const handleClickAlgorithms = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
@@ -99,7 +75,7 @@ export default function Navigation() {
 
   const handleVisualizeAlgorithms = async (id: string) => {
     handleCloseAlgorithms();
-    clearVisitedCells();
+    clearVisitedCells(false);
     setLoading(true);
     let exploredNodes: Node[] = [];
 
@@ -181,7 +157,7 @@ export default function Navigation() {
 
   const handleVisualizeMazes = async (id: string) => {
     handleCloseMazes();
-    handleClearGrid();
+    handleClearGrid(false);
     setSelectedAlgorithm(id);
     setLoading(true);
     const copyOfAllNodes = { ...allNodes };
@@ -273,8 +249,8 @@ export default function Navigation() {
     }
   };
 
-  const handleClearGrid = () => {
-    setSelectedGridAction("gridCleared");
+  const handleClearGrid = (showSnackbar: boolean = true) => {
+    if (showSnackbar) setSelectedGridAction("gridCleared");
     const copyOfAllNodes = { ...allNodes };
     for (const node of Object.values(copyOfAllNodes)) {
       node.distance = 0;
@@ -287,6 +263,25 @@ export default function Navigation() {
       node.prevNode = null;
       node.isInShortestPath = false;
       node.weight = 0;
+    }
+
+    setAllNodes(copyOfAllNodes);
+  };
+
+  const clearVisitedCells = (showSnackbar: boolean = true) => {
+    if (showSnackbar) setSelectedGridAction("pathCleared");
+    const copyOfAllNodes = { ...allNodes };
+    for (const node of Object.values(copyOfAllNodes)) {
+      if (node.isWall) continue;
+      node.distance = 0;
+      node.heuristic = 0;
+      node.aStarDistance = 0;
+      node.isWall = false;
+      node.visiting = false;
+      node.visited = false;
+      node.isCurrent = false;
+      node.prevNode = null;
+      node.isInShortestPath = false;
     }
 
     setAllNodes(copyOfAllNodes);
@@ -415,7 +410,7 @@ export default function Navigation() {
           <Button
             id="basic-button"
             aria-haspopup="false"
-            onClick={handleClearGrid}
+            onClick={() => handleClearGrid()}
             className="!text-white !ml-4"
             disabled={loading}
           >
@@ -424,7 +419,7 @@ export default function Navigation() {
           <Button
             id="basic-button"
             aria-haspopup="false"
-            onClick={clearVisitedCells}
+            onClick={() => clearVisitedCells()}
             className="!text-white !ml-4"
             disabled={loading}
           >
