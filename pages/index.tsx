@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { AlertBar } from "../components/AlertBar";
 import { AlgorithmConfirmationSnackbar } from "../components/AlgorithmConfirmationSnackbar";
+import { ChangeGridSnackbar } from "../components/ChangeGridSnackbar";
 import { FloatingTutorial } from "../components/FloatingTutorial";
 import { Grid } from "../components/Grid";
 import { Legend } from "../components/Legend";
@@ -22,6 +23,7 @@ const Home: NextPage = () => {
         <AlertBar />
         <Grid />
         <AlgorithmConfirmationSnackbar />
+        <ChangeGridSnackbar />
         <TutorialModal />
         <FloatingTutorial />
       </main>

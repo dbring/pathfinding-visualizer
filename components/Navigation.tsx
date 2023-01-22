@@ -1,7 +1,10 @@
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
+import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import Snackbar from "@mui/material/Snackbar";
 import { useContext, useState } from "react";
 import { algorithmInfo, algorithms, mazes } from "../constants/constants";
 import { GlobalContext } from "../context/global.context";
@@ -20,7 +23,10 @@ import { Node } from "../types/types";
 import { animateExploredNodes } from "../utils/animation/animate-exploration";
 import { animateMazePaths } from "../utils/animation/animate-maze-paths";
 import { animateMazeWalls } from "../utils/animation/animate-maze-walls";
-import { animateShortestPath } from "../utils/animation/animate-shortest-path";
+import {
+  animateShortestPath,
+  timer,
+} from "../utils/animation/animate-shortest-path";
 import { constructShortestPath } from "../utils/animation/construct-shortest-path";
 import { setAllNodesAsWalls } from "../utils/utility-functions/utility-functions";
 
@@ -41,12 +47,15 @@ export default function Navigation() {
     setSelectedAlgorithm,
     loading,
     setLoading,
+    selectedGridAction,
+    setSelectedGridAction,
   } = useContext(GlobalContext);
   const [anchorElAlgorithms, setAnchorElAlgorithms] =
     useState<null | HTMLElement>(null);
   const [anchorElMazes, setAnchorElMazes] = useState<null | HTMLElement>(null);
 
   const clearVisitedCells = () => {
+    setSelectedGridAction("pathCleared");
     const copyOfAllNodes = { ...allNodes };
     for (const node of Object.values(copyOfAllNodes)) {
       if (node.isWall) continue;
@@ -265,6 +274,7 @@ export default function Navigation() {
   };
 
   const handleClearGrid = () => {
+    setSelectedGridAction("gridCleared");
     const copyOfAllNodes = { ...allNodes };
     for (const node of Object.values(copyOfAllNodes)) {
       node.distance = 0;
@@ -283,6 +293,7 @@ export default function Navigation() {
   };
 
   const handleSetWeights = () => {
+    setSelectedGridAction("setWeights");
     const copyOfAllNodes = { ...allNodes };
 
     for (const node of Object.values(copyOfAllNodes)) {
@@ -296,6 +307,7 @@ export default function Navigation() {
   };
 
   const handleClearWeights = () => {
+    setSelectedGridAction("weightsCleared");
     const copyOfAllNodes = { ...allNodes };
 
     for (const node of Object.values(copyOfAllNodes)) {
@@ -449,6 +461,7 @@ export default function Navigation() {
           variant="contained"
           disabled={loading || !selectedAlgorithm.length}
         >
+          <NotificationsActiveIcon className="mr-2" />
           {loading
             ? "Algorithm is running..."
             : !selectedAlgorithm.length

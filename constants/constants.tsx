@@ -30,15 +30,19 @@ export const distanceTwoDirections = [
   [0, -2],
 ];
 
-interface algorithms {
+interface Algorithms {
   [index: string]: string;
 }
 
-interface mazes {
+interface Mazes {
   [index: string]: string;
 }
 
-export const algorithms: algorithms = {
+interface GridActions {
+  [index: string]: string;
+}
+
+export const algorithms: Algorithms = {
   dijkstra: "dijkstra",
   aStar: "aStar",
   breadthFirstSearch: "breadthFirstSearch",
@@ -46,13 +50,20 @@ export const algorithms: algorithms = {
   bellmanFord: "bellmanFord",
 };
 
-export const mazes: mazes = {
+export const mazes: Mazes = {
   prim: "prim",
   kruskal: "kruskal",
   recursiveBacktracker: "recursiveBacktracker",
   recursiveDivision: "recursiveDivision",
   randomlySelected: "randomlySelected",
   aldousBroder: "aldousBroder",
+};
+
+export const gridActions: GridActions = {
+  gridCleared: "Grid cleared",
+  pathCleared: "Paths cleared",
+  setWeights: "Weights set",
+  weightsCleared: "Weights cleared",
 };
 
 interface AlgorithmInfo {

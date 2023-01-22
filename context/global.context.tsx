@@ -16,6 +16,8 @@ interface IGlobal {
   setLoading: (loading: boolean) => void;
   isTutorialOpen: boolean;
   setIsTutorialOpen: (isTutorialOpen: boolean) => void;
+  selectedGridAction: string;
+  setSelectedGridAction: (selectedGridAction: string) => void;
 }
 
 const initialNode: Node = {
@@ -46,6 +48,8 @@ export const GlobalContext = createContext<IGlobal>({
   setLoading: () => {},
   isTutorialOpen: true,
   setIsTutorialOpen: () => {},
+  selectedGridAction: "",
+  setSelectedGridAction: () => {},
 });
 
 interface GlobalProviderProps {
@@ -63,6 +67,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
   const [selectedAlgorithm, setSelectedAlgorithm] = useState("");
   const [loading, setLoading] = useState(false);
   const [isTutorialOpen, setIsTutorialOpen] = useState(true);
+  const [selectedGridAction, setSelectedGridAction] = useState("");
 
   useEffect(() => {
     const { innerWidth, innerHeight } = window;
@@ -147,6 +152,8 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
         setLoading,
         isTutorialOpen,
         setIsTutorialOpen,
+        selectedGridAction,
+        setSelectedGridAction,
       }}
     >
       {children}
