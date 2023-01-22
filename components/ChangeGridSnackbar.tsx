@@ -8,6 +8,10 @@ export const ChangeGridSnackbar = () => {
   const { selectedGridAction } = useContext(GlobalContext);
   const [open, setOpen] = useState(false);
 
+  useEffect(() => {
+    setOpen(true);
+  }, [selectedGridAction]);
+
   const handleClose = (
     event: React.SyntheticEvent | Event,
     reason?: string
