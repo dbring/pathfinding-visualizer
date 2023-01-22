@@ -9,7 +9,7 @@ export const ChangeGridSnackbar = () => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    setOpen(true);
+    if (selectedGridAction.length) setOpen(true);
   }, [selectedGridAction]);
 
   const handleClose = (
@@ -25,7 +25,7 @@ export const ChangeGridSnackbar = () => {
 
   return (
     <div>
-      <Snackbar open={open} onClose={handleClose}>
+      <Snackbar open={open} onClose={handleClose} autoHideDuration={6000}>
         <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
           {gridActions[selectedGridAction]} successfully!
         </Alert>
