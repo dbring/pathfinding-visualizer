@@ -1,4 +1,9 @@
 import tutorialPage1Image from "../assets/tutorial-1.jpeg";
+import tutorialPage2Image from "../assets/tutorial-2.jpeg";
+import tutorialPage3Image from "../assets/tutorial-3.jpeg";
+import tutorialPage4Image from "../assets/tutorial-4.jpeg";
+import tutorialPage5Image from "../assets/tutorial-5.jpeg";
+import tutorialPage6Image from "../assets/tutorial-6.jpeg";
 
 export const PASSAGE = false;
 export const WALL = true;
@@ -148,7 +153,7 @@ export const tutorialStepData = [
     ),
     image: (
       <>
-        <img src={tutorialPage1Image.src} />
+        <img src={tutorialPage1Image.src} className="text-center" />
       </>
     ),
   },
@@ -163,6 +168,13 @@ export const tutorialStepData = [
         <br />
         All of the algorithms on this application are adapted for a 2D grid,
         where movements from one grid cell to another have a "cost" of 1.
+        <br />
+        <br />
+      </>
+    ),
+    image: (
+      <>
+        <img src={tutorialPage2Image.src} className="text-center m-auto" />
       </>
     ),
   },
@@ -180,6 +192,13 @@ export const tutorialStepData = [
         <br />
         Click the "Visualize" button below the navigation bar to start running
         the selected algorithm.
+        <br />
+        <br />
+      </>
+    ),
+    image: (
+      <>
+        <img src={tutorialPage3Image.src} className="text-center" />
       </>
     ),
   },
@@ -198,6 +217,13 @@ export const tutorialStepData = [
         <br />
         Weighted cells are colored orange, where the darker the orange color is,
         the more costly it is to visit.
+        <br />
+        <br />
+      </>
+    ),
+    image: (
+      <>
+        <img src={tutorialPage4Image.src} className="text-center" />
       </>
     ),
   },
@@ -215,6 +241,13 @@ export const tutorialStepData = [
         <br />
         If you want to access this tutorial again, click on the "?" in the
         bottom right corner of your screen.
+        <br />
+        <br />
+      </>
+    ),
+    image: (
+      <>
+        <img src={tutorialPage5Image.src} className="text-center" />
       </>
     ),
   },
@@ -225,8 +258,9 @@ export const tutorialStepData = [
         I hope you have just as much fun playing around with this visualization
         tool as I had building it!
         <br />
-        <br /> This app was built using Next.js, TypeScript, TailwindCSS, and
-        the Material UI library.
+        <br />
+        This app was built using Next.js, TypeScript, TailwindCSS, and the
+        Material UI library. All artwork was generated using Stable Diffusion.
         <br />
         <br />
         If you want to see the source code for this application, check out my{" "}
@@ -240,6 +274,13 @@ export const tutorialStepData = [
           </a>
         }
         .
+        <br />
+        <br />
+      </>
+    ),
+    image: (
+      <>
+        <img src={tutorialPage6Image.src} className="text-center" />
       </>
     ),
   },
