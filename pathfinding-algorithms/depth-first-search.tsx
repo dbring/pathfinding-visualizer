@@ -1,5 +1,5 @@
 import { adjacentDirections } from "../constants/constants";
-import { AllNodes, Node } from "../types/types";
+import { AllNodes, GridNode } from "../types/types";
 import {
   getNode,
   isInbounds,
@@ -8,12 +8,12 @@ import {
 export const depthFirstSearch = (
   numRows: number,
   numCols: number,
-  startNode: Node,
-  targetNode: Node,
+  startNode: GridNode,
+  targetNode: GridNode,
   allNodes: AllNodes
 ) => {
   const stack = [startNode];
-  const exploredNodes: Node[] = [];
+  const exploredNodes: GridNode[] = [];
   const { row: targetRow, col: targetCol } = targetNode;
 
   while (stack.length) {

@@ -1,24 +1,24 @@
 import { adjacentDirections } from "../constants/constants";
-import { AllNodes, Node } from "../types/types";
+import { AllNodes, GridNode } from "../types/types";
 import {
   getNode,
   isInbounds,
 } from "../utils/utility-functions/utility-functions";
 
-const sortHeap = (heap: Node[]) => {
+const sortHeap = (heap: GridNode[]) => {
   heap.sort((nodeA, nodeB) => nodeA.distance - nodeB.distance);
 };
 
 export const dijkstra = (
   numRows: number,
   numCols: number,
-  startNode: Node,
-  targetNode: Node,
+  startNode: GridNode,
+  targetNode: GridNode,
   allNodes: AllNodes
-): Node[] => {
+): GridNode[] => {
   const heap = [startNode];
   startNode.visiting = true;
-  const exploredNodes: Node[] = [];
+  const exploredNodes: GridNode[] = [];
 
   const { row: targetRow, col: targetCol } = targetNode;
 

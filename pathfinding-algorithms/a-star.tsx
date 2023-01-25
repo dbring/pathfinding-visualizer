@@ -1,11 +1,11 @@
 import { adjacentDirections } from "../constants/constants";
-import { AllNodes, Node } from "../types/types";
+import { AllNodes, GridNode } from "../types/types";
 import {
   getNode,
   isInbounds,
 } from "../utils/utility-functions/utility-functions";
 
-const heuristic = (node0: Node, node1: Node): number => {
+const heuristic = (node0: GridNode, node1: GridNode): number => {
   const d1 = Math.abs(node1.row - node0.row);
   const d2 = Math.abs(node1.col - node0.col);
 
@@ -15,12 +15,12 @@ const heuristic = (node0: Node, node1: Node): number => {
 export const aStar = (
   numRows: number,
   numCols: number,
-  startNode: Node,
-  targetNode: Node,
+  startNode: GridNode,
+  targetNode: GridNode,
   allNodes: AllNodes
-): Node[] => {
-  const openSet: Node[] = [startNode];
-  const exploredNodes: Node[] = [];
+): GridNode[] => {
+  const openSet: GridNode[] = [startNode];
+  const exploredNodes: GridNode[] = [];
   const { row: targetRow, col: targetCol } = targetNode;
 
   while (openSet.length) {

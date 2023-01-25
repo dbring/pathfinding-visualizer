@@ -1,5 +1,5 @@
 import { adjacentDirections } from "../constants/constants";
-import { AllNodes, Node } from "../types/types";
+import { AllNodes, GridNode } from "../types/types";
 import {
   getNode,
   isInbounds,
@@ -8,15 +8,15 @@ import {
 export const bellmanFord = (
   numRows: number,
   numCols: number,
-  startNode: Node,
-  targetNode: Node,
+  startNode: GridNode,
+  targetNode: GridNode,
   allNodes: AllNodes,
   numberOfStops: number
-): Node[] => {
+): GridNode[] => {
   let distances: number[][] = new Array(numRows)
     .fill(Infinity)
     .map((e) => new Array(numCols).fill(Infinity));
-  const exploredNodes: Node[] = [];
+  const exploredNodes: GridNode[] = [];
 
   const { row: startRow, col: startCol } = startNode;
   distances[startRow][startCol] = 0;
