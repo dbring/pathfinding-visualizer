@@ -1,5 +1,5 @@
 import { distanceTwoDirections } from "../constants/constants";
-import { AllNodes, Node } from "../types/types";
+import { AllNodes, GridNode } from "../types/types";
 import {
   getNode,
   isInbounds,
@@ -10,7 +10,7 @@ export const aldousBroder = (
   numCols: number,
   copyOfAllNodes: AllNodes
 ) => {
-  const cells: Node[] = [];
+  const cells: GridNode[] = [];
 
   let remainingNodes = 0;
   for (let row = 1; row < numRows; row += 2) {
@@ -24,7 +24,7 @@ export const aldousBroder = (
   let { row, col } = initialNode;
   initialNode.visiting = true;
 
-  const exploredNodes: Node[] = [];
+  const exploredNodes: GridNode[] = [];
   exploredNodes.push(initialNode);
   remainingNodes--;
 

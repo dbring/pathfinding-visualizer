@@ -1,5 +1,5 @@
 import { distanceTwoDirections, PASSAGE } from "../constants/constants";
-import { AllNodes, Node } from "../types/types";
+import { AllNodes, GridNode } from "../types/types";
 import {
   getNode,
   isInbounds,
@@ -9,11 +9,11 @@ import {
 const getWallNeighbors = (
   numRows: number,
   numCols: number,
-  node: Node,
+  node: GridNode,
   copyOfAllNodes: AllNodes
-): Node[] => {
+): GridNode[] => {
   const { row, col } = node;
-  const neighboringWalls: Node[] = [];
+  const neighboringWalls: GridNode[] = [];
 
   for (const [changeRow, changeCol] of distanceTwoDirections) {
     const newRow = row + changeRow;
@@ -32,8 +32,8 @@ const getWallNeighbors = (
 export const recursiveBacktracker = (
   numRows: number,
   numCols: number,
-  startNode: Node,
-  targetNode: Node,
+  startNode: GridNode,
+  targetNode: GridNode,
   allNodes: AllNodes
 ) => {
   let copyOfAllNodes = { ...allNodes };
@@ -45,7 +45,7 @@ export const recursiveBacktracker = (
   let randomNode = getNode(randomRow, randomCol, copyOfAllNodes);
 
   const stack = [randomNode];
-  const exploredNodes: Node[] = [];
+  const exploredNodes: GridNode[] = [];
 
   while (stack.length) {
     const currentNode = stack[stack.length - 1];

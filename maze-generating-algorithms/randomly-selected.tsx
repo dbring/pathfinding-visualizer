@@ -1,14 +1,14 @@
-import { AllNodes, Node } from "../types/types";
+import { AllNodes, GridNode } from "../types/types";
 import { getNode } from "../utils/utility-functions/utility-functions";
 
 export const generateRandomMaze = (
   numRows: number,
   numCols: number,
-  startNode: Node,
-  targetNode: Node,
+  startNode: GridNode,
+  targetNode: GridNode,
   allNodes: AllNodes
-): Node[] => {
-  const mazeWalls: Node[] = [];
+): GridNode[] => {
+  const mazeWalls: GridNode[] = [];
 
   for (let row = 0; row < numRows; row++) {
     for (let col = 0; col < numCols; col++) {

@@ -1,7 +1,7 @@
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
 import { useContext, useEffect, useState } from "react";
-import { algorithmInfo, gridActions } from "../constants/constants";
+import { gridActions } from "../constants/constants";
 import { GlobalContext } from "../context/global.context";
 
 export const ChangeGridSnackbar = () => {

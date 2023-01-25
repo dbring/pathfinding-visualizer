@@ -1,13 +1,13 @@
 import { createContext, useEffect, useState } from "react";
 import { CELL_SIZE } from "../constants/constants";
-import { AllNodes, Node } from "../types/types";
+import { AllNodes, GridNode } from "../types/types";
 import { getStringRowAndCol } from "../utils/utility-functions/utility-functions";
 
 interface IGlobal {
   numRows: number;
   numCols: number;
-  startNode: Node;
-  targetNode: Node;
+  startNode: GridNode;
+  targetNode: GridNode;
   allNodes: AllNodes;
   setAllNodes: (newNodes: AllNodes) => void;
   selectedAlgorithm: string;
@@ -20,20 +20,7 @@ interface IGlobal {
   setSelectedGridAction: (selectedGridAction: string) => void;
 }
 
-const initialNode: Node = {
-  row: 0,
-  col: 0,
-  distance: 0,
-  heuristic: 0,
-  aStarDistance: 0,
-  isWall: false,
-  visited: false,
-  visiting: false,
-  isCurrent: false,
-  prevNode: null,
-  isInShortestPath: false,
-  weight: 0,
-};
+const initialNode = new GridNode(0, 0);
 
 export const GlobalContext = createContext<IGlobal>({
   numRows: 0,
@@ -57,8 +44,8 @@ interface GlobalProviderProps {
 }
 
 export const GlobalProvider = ({ children }: GlobalProviderProps) => {
-  const [startNode, setStartNode] = useState<Node>(initialNode);
-  const [targetNode, setTargetNode] = useState<Node>(initialNode);
+  const [startNode, setStartNode] = useState<GridNode>(initialNode);
+  const [targetNode, setTargetNode] = useState<GridNode>(initialNode);
   const [numRows, setNumRows] = useState(0);
   const [numCols, setNumCols] = useState(0);
   const [width, setWidth] = useState(0);
@@ -83,55 +70,19 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
   useEffect(() => {
     const startRow = Math.floor(Math.random() * numRows);
     const startCol = Math.floor((Math.random() * numCols) / 2);
-    setStartNode({
-      row: startRow,
-      col: startCol,
-      distance: 0,
-      heuristic: 0,
-      aStarDistance: 0,
-      isWall: false,
-      visited: false,
-      visiting: false,
-      isCurrent: false,
-      prevNode: null,
-      isInShortestPath: false,
-      weight: 0,
-    });
+    setStartNode(new GridNode(startRow, startCol));
 
     const targetRow = Math.floor(Math.random() * numRows);
     const targetCol = Math.floor(numCols / 2 + (Math.random() * numCols) / 2);
-    setTargetNode({
-      row: targetRow,
-      col: targetCol,
-      distance: 0,
-      heuristic: 0,
-      aStarDistance: 0,
-      isWall: false,
-      visited: false,
-      visiting: false,
-      isCurrent: false,
-      prevNode: null,
-      isInShortestPath: false,
-      weight: 0,
-    });
+    setTargetNode(new GridNode(targetRow, targetCol));
 
     const listOfAllNodes: AllNodes = {};
     for (let row = 0; row < numRows; row++) {
       for (let col = 0; col < numCols; col++) {
-        listOfAllNodes[getStringRowAndCol(row, col)] = {
-          row: parseInt(`${row}`),
-          col: parseInt(`${col}`),
-          distance: 0,
-          heuristic: 0,
-          aStarDistance: 0,
-          isWall: false,
-          visited: false,
-          visiting: false,
-          isCurrent: false,
-          prevNode: null,
-          isInShortestPath: false,
-          weight: 0,
-        };
+        listOfAllNodes[getStringRowAndCol(row, col)] = new GridNode(
+          parseInt(`${row}`),
+          parseInt(`${col}`)
+        );
       }
     }
     setAllNodes(listOfAllNodes);

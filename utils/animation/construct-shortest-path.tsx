@@ -1,7 +1,7 @@
-import { Node } from "../../types/types";
+import { GridNode } from "../../types/types";
 
-export const constructShortestPath = (targetNode: Node) => {
-  const shortestPathReverse: Node[] = [];
+export const constructShortestPath = (targetNode: GridNode) => {
+  const shortestPathReverse: GridNode[] = [];
 
   let currentNode = targetNode;
 

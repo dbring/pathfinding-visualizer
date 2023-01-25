@@ -17,7 +17,7 @@ import { bellmanFord } from "../pathfinding-algorithms/bellman-ford";
 import { breadthFirstSearch } from "../pathfinding-algorithms/breadth-first-search";
 import { depthFirstSearch } from "../pathfinding-algorithms/depth-first-search";
 import { dijkstra } from "../pathfinding-algorithms/dijkstra";
-import { Node } from "../types/types";
+import { GridNode } from "../types/types";
 import { animateExploredNodes } from "../utils/animation/animate-exploration";
 import { animateMazePaths } from "../utils/animation/animate-maze-paths";
 import { animateMazeWalls } from "../utils/animation/animate-maze-walls";
@@ -77,7 +77,7 @@ export default function Navigation() {
     handleCloseAlgorithms();
     clearVisitedCells(false);
     setLoading(true);
-    let exploredNodes: Node[] = [];
+    let exploredNodes: GridNode[] = [];
 
     if (algorithms[id] === "dijkstra") {
       exploredNodes = dijkstra(
@@ -135,7 +135,7 @@ export default function Navigation() {
     }
 
     const { row: targetRow, col: targetCol } = targetNode;
-    let lastNode: Node | null = null;
+    let lastNode: GridNode | null = null;
 
     for (const node of exploredNodes) {
       const { row, col } = node;
@@ -162,7 +162,7 @@ export default function Navigation() {
     setLoading(true);
     const copyOfAllNodes = { ...allNodes };
 
-    let maze: Node[] = [];
+    let maze: GridNode[] = [];
 
     if (mazes[id] === "aldousBroder") {
       // animate path

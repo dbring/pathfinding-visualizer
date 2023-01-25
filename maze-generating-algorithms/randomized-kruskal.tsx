@@ -3,14 +3,14 @@ Note: we can make this algorithm more efficient by implementing a ranking system
 */
 
 import { distanceTwoDirections, PASSAGE } from "../constants/constants";
-import { AllNodes, Node } from "../types/types";
+import { AllNodes, GridNode } from "../types/types";
 import {
   getNode,
   isInbounds,
   setAllNodesAsWalls,
 } from "../utils/utility-functions/utility-functions";
 
-type NodeTuple = [Node, Node];
+type NodeTuple = [GridNode, GridNode];
 
 // make forest of passages
 const setForestOfPassages = (
@@ -34,7 +34,7 @@ const shuffle = (array: NodeTuple[]) => {
 };
 
 class DisjointSetUnion {
-  parent: Node[][];
+  parent: GridNode[][];
 
   constructor(numRows: number, numCols: number, copyOfAllNodes: AllNodes) {
     this.parent = new Array(numRows)
@@ -49,7 +49,7 @@ class DisjointSetUnion {
     }
   }
 
-  findParent = (node: Node): Node => {
+  findParent = (node: GridNode): GridNode => {
     const { row, col } = node;
     const parentNode = this.parent[row][col];
     const { row: parentRow, col: parentCol } = parentNode;
@@ -59,7 +59,7 @@ class DisjointSetUnion {
     return this.parent[row][col];
   };
 
-  union = (node1: Node, node2: Node) => {
+  union = (node1: GridNode, node2: GridNode) => {
     const parent1 = this.findParent(node1);
     const { row: row1, col: col1 } = parent1;
 
@@ -101,14 +101,14 @@ const getPassagesDividedByAWall = (
 export const randomizedKruskal = (
   numRows: number,
   numCols: number,
-  startNode: Node,
-  targetNode: Node,
+  startNode: GridNode,
+  targetNode: GridNode,
   allNodes: AllNodes
 ) => {
   const copyOfAllNodes = { ...allNodes };
   setAllNodesAsWalls(startNode, targetNode, copyOfAllNodes);
   setForestOfPassages(numRows, numCols, copyOfAllNodes);
-  const exploredNodes: Node[] = [];
+  const exploredNodes: GridNode[] = [];
 
   // Get edges
   let passagesDividedByAWall = getPassagesDividedByAWall(

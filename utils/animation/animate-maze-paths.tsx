@@ -1,9 +1,9 @@
-import { AllNodes, Node } from "../../types/types";
+import { AllNodes, GridNode } from "../../types/types";
 import { getNode } from "../utility-functions/utility-functions";
 import { timer } from "./animate-shortest-path";
 
 export const animateMazePaths = async (
-  pathNodes: Node[],
+  pathNodes: GridNode[],
   allNodes: AllNodes,
   setAllNodes: (allNodes: AllNodes) => void
 ) => {

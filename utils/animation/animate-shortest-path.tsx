@@ -1,10 +1,10 @@
-import { AllNodes, Node } from "../../types/types";
+import { AllNodes, GridNode } from "../../types/types";
 import { getNode } from "../utility-functions/utility-functions";
 
 export const timer = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
 export const animateShortestPath = async (
-  shortestPath: Node[],
+  shortestPath: GridNode[],
   allNodes: AllNodes,
   setAllNodes: (allNodes: AllNodes) => void
 ) => {

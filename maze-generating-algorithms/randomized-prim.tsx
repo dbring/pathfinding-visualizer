@@ -1,5 +1,5 @@
 import { distanceTwoDirections, PASSAGE, WALL } from "../constants/constants";
-import { AllNodes, Node } from "../types/types";
+import { AllNodes, GridNode } from "../types/types";
 import {
   getNode,
   isInbounds,
@@ -9,11 +9,11 @@ import {
 const getWallsDistanceTwo = (
   numRows: number,
   numCols: number,
-  node: Node,
+  node: GridNode,
   copyOfAllNodes: AllNodes
 ) => {
   const { row, col } = node;
-  const distanceTwoWalls: Set<Node> = new Set();
+  const distanceTwoWalls: Set<GridNode> = new Set();
 
   for (const [changeRow, changeCol] of distanceTwoDirections) {
     const newRow = row + changeRow;
@@ -34,11 +34,11 @@ const getWallsDistanceTwo = (
 const getPassagesDistanceTwo = (
   numRows: number,
   numCols: number,
-  node: Node,
+  node: GridNode,
   copyOfAllNodes: AllNodes
-): Node[] => {
+): GridNode[] => {
   const { row, col } = node;
-  const distanceTwoPassages: Node[] = [];
+  const distanceTwoPassages: GridNode[] = [];
 
   for (const [changeRow, changeCol] of distanceTwoDirections) {
     const newRow = row + changeRow;
@@ -57,10 +57,10 @@ const getPassagesDistanceTwo = (
 };
 
 const connectNodes = (
-  currentNode: Node,
-  passageNode: Node,
+  currentNode: GridNode,
+  passageNode: GridNode,
   copyOfAllNodes: AllNodes,
-  passageNodes: Node[]
+  passageNodes: GridNode[]
 ) => {
   const inBetweenRow = Math.floor((currentNode.row + passageNode.row) / 2);
   const inBetweenCol = Math.floor((currentNode.col + passageNode.col) / 2);
@@ -75,8 +75,8 @@ const connectNodes = (
 export const randomizedPrim = (
   numRows: number,
   numCols: number,
-  startNode: Node,
-  targetNode: Node,
+  startNode: GridNode,
+  targetNode: GridNode,
   allNodes: AllNodes
 ) => {
   const copyOfAllNodes = { ...allNodes };
@@ -88,10 +88,10 @@ export const randomizedPrim = (
 
   randomNode.isWall = PASSAGE;
 
-  const passageNodes: Node[] = [];
+  const passageNodes: GridNode[] = [];
   passageNodes.push(randomNode);
 
-  const frontier: Set<Node> = getWallsDistanceTwo(
+  const frontier: Set<GridNode> = getWallsDistanceTwo(
     numRows,
     numCols,
     randomNode,

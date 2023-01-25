@@ -1,4 +1,4 @@
-import { AllNodes, Node } from "../types/types";
+import { AllNodes, GridNode } from "../types/types";
 import { getNode } from "../utils/utility-functions/utility-functions";
 export const recursiveDivision = (
   startRow: number,
@@ -6,10 +6,10 @@ export const recursiveDivision = (
   startCol: number,
   endCol: number,
   allNodes: AllNodes,
-  targetNode: Node,
+  targetNode: GridNode,
   orientation: string
-): Node[] => {
-  const mazeWalls: Node[] = [];
+): GridNode[] => {
+  const mazeWalls: GridNode[] = [];
 
   const divide = (
     startRow: number,
@@ -17,7 +17,7 @@ export const recursiveDivision = (
     startCol: number,
     endCol: number,
     allNodes: AllNodes,
-    targetNode: Node,
+    targetNode: GridNode,
     orientation: string
   ) => {
     if (startRow > endRow || startCol > endCol) return;

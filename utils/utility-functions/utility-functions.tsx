@@ -1,5 +1,5 @@
 import { WALL } from "../../constants/constants";
-import { AllNodes, Node } from "../../types/types";
+import { AllNodes, GridNode } from "../../types/types";
 
 export const getStringRowAndCol = (row: number, col: number): string =>
   `${row},${col}`;
@@ -21,8 +21,8 @@ export const isInbounds = (
 };
 
 export const setAllNodesAsWalls = (
-  startNode: Node,
-  targetNode: Node,
+  startNode: GridNode,
+  targetNode: GridNode,
   allNodes: AllNodes
 ) => {
   for (const node of Object.values(allNodes)) {
